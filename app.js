@@ -461,7 +461,7 @@ let activeCategory = "all";
 let searchQuery = "";
 
 // 1669 Modal State
-let selectedPatient = "self"; // "self" or "others"
+let selectedPatient = null; // null, "self" or "others"
 let selectedSymptoms = new Set();
 let locationWatchId = null;
 let currentCoords = null; // { lat, lng, accuracy }
@@ -815,19 +815,31 @@ function setupEventListeners() {
 
   // Patient Selection buttons
   elements.patientSelf.addEventListener("click", () => {
-    selectedPatient = "self";
-    elements.patientSelf.classList.add("active");
-    elements.patientSelf.setAttribute("aria-pressed", "true");
-    elements.patientOthers.classList.remove("active");
-    elements.patientOthers.setAttribute("aria-pressed", "false");
+    if (selectedPatient === "self") {
+      selectedPatient = null;
+      elements.patientSelf.classList.remove("active");
+      elements.patientSelf.setAttribute("aria-pressed", "false");
+    } else {
+      selectedPatient = "self";
+      elements.patientSelf.classList.add("active");
+      elements.patientSelf.setAttribute("aria-pressed", "true");
+      elements.patientOthers.classList.remove("active");
+      elements.patientOthers.setAttribute("aria-pressed", "false");
+    }
   });
   
   elements.patientOthers.addEventListener("click", () => {
-    selectedPatient = "others";
-    elements.patientOthers.classList.add("active");
-    elements.patientOthers.setAttribute("aria-pressed", "true");
-    elements.patientSelf.classList.remove("active");
-    elements.patientSelf.setAttribute("aria-pressed", "false");
+    if (selectedPatient === "others") {
+      selectedPatient = null;
+      elements.patientOthers.classList.remove("active");
+      elements.patientOthers.setAttribute("aria-pressed", "false");
+    } else {
+      selectedPatient = "others";
+      elements.patientOthers.classList.add("active");
+      elements.patientOthers.setAttribute("aria-pressed", "true");
+      elements.patientSelf.classList.remove("active");
+      elements.patientSelf.setAttribute("aria-pressed", "false");
+    }
   });
 
   // Photo Uploader Input and remove btn
@@ -957,9 +969,9 @@ function open1669Modal() {
   elements.modal1669.style.display = "flex";
   
   // Reset fields to default
-  selectedPatient = "self";
-  elements.patientSelf.classList.add("active");
-  elements.patientSelf.setAttribute("aria-pressed", "true");
+  selectedPatient = null;
+  elements.patientSelf.classList.remove("active");
+  elements.patientSelf.setAttribute("aria-pressed", "false");
   elements.patientOthers.classList.remove("active");
   elements.patientOthers.setAttribute("aria-pressed", "false");
   
