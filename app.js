@@ -669,9 +669,7 @@ function renderQuickCards() {
         <span class="quick-card-number">${item.number}</span>
       </div>
       <div class="quick-card-call-icon" aria-hidden="true">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
-          <path d="M21 16.42v3.536a1 1 0 0 1-.93.998c-.437.03-.79.046-1.07.046-8.284 0-15-6.716-15-15 0-.28.015-.633.046-1.07A1 1 0 0 1 5.044 3H8.58a1 1 0 0 1 .979.796c.19.78.497 1.52.91 2.2a1 1 0 0 1-.225 1.175L8.217 9.2a13.06 13.06 0 0 0 6.583 6.583l2.03-2.03a1 1 0 0 1 1.175-.226c.68.413 1.42.72 2.2.91a1 1 0 0 1 .796.979v-.016z"/>
-        </svg>
+        <span class="icon-call" aria-hidden="true"></span>
       </div>
     `;
     elements.quickCallsContainer.appendChild(a);
@@ -762,16 +760,12 @@ function renderList() {
           <p class="number-card-desc">${item.desc[currentLang]}</p>
         </div>
         <div class="number-card-hotline" aria-label="Phone number: ${item.number}">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-          </svg>
+          <span class="icon-call" aria-hidden="true"></span>
           ${item.number}
         </div>
       </div>
       <a href="tel:${item.number}" class="btn-call" aria-label="Call ${item.name[currentLang]} at ${item.number}">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-          <path d="M21 16.42v3.536a1 1 0 0 1-.93.998c-.437.03-.79.046-1.07.046-8.284 0-15-6.716-15-15 0-.28.015-.633.046-1.07A1 1 0 0 1 5.044 3H8.58a1 1 0 0 1 .979.796c.19.78.497 1.52.91 2.2a1 1 0 0 1-.225 1.175L8.217 9.2a13.06 13.06 0 0 0 6.583 6.583l2.03-2.03a1 1 0 0 1 1.175-.226c.68.413 1.42.72 2.2.91a1 1 0 0 1 .796.979v-.016z"/>
-        </svg>
+        <span class="icon-call" aria-hidden="true"></span>
         <span>${UI_STRINGS[currentLang].callBtn}</span>
       </a>
     `;

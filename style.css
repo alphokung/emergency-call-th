@@ -682,7 +682,8 @@ body {
   gap: var(--spacing-xs);
 }
 
-.number-card-hotline svg {
+.number-card-hotline svg,
+.number-card-hotline .icon-call {
   width: 20px;
   height: 20px;
 }
@@ -978,7 +979,8 @@ body {
   transform: scale(0.98);
 }
 
-.btn-fast-call svg {
+.btn-fast-call svg,
+.btn-fast-call .icon-call {
   animation: shakePhone 2s infinite ease-in-out;
 }
 
@@ -1407,4 +1409,28 @@ body.modal-open {
   opacity: 1;
   visibility: visible;
   transform: translate(-50%, 0);
+}
+
+/* Custom Call Icon styling using CSS Mask */
+.icon-call {
+  display: inline-block;
+  background-color: currentColor;
+  -webkit-mask: url('_media/call.svg') no-repeat center / contain;
+  mask: url('_media/call.svg') no-repeat center / contain;
+  vertical-align: middle;
+}
+
+.quick-card-call-icon .icon-call {
+  width: 24px;
+  height: 24px;
+}
+
+.btn-call .icon-call {
+  width: 20px;
+  height: 20px;
+}
+
+.btn-primary-action .icon-call {
+  width: 18px;
+  height: 18px;
 }
