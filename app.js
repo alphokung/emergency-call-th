@@ -379,7 +379,28 @@ const UI_STRINGS = {
     },
     announcementFound: "ค้นพบแล้ว {count} รายการ",
     announcementEmpty: "ไม่พบข้อมูลการค้นหาสำหรับ",
-    developedBy: "พัฒนาโดย สำนักงานพัฒนารัฐบาลดิจิทัล (องค์การมหาชน) (สพร.)"
+    developedBy: "พัฒนาโดย สำนักงานพัฒนารัฐบาลดิจิทัล (องค์การมหาชน) (สพร.)",
+    
+    // 1669 Modal Strings
+    modalTitle: "แจ้งเหตุฉุกเฉิน กู้ชีพ 1669",
+    modalFastCall: "โทรสายด่วน 1669 ทันที",
+    modalFastCallHint: "โทรออกตรงไปยังระบบกู้ชีพเพื่อความรวดเร็วสูงสุด",
+    modalDivider: "หรือระบุรายละเอียดเพิ่มเติมเพื่อแจ้งเหตุ",
+    modalPatientLabel: "ผู้ป่วยคือใคร?",
+    modalPatientSelf: "ตัวเอง",
+    modalPatientOthers: "ผู้อื่น",
+    modalSymptomsLabel: "อาการ / ข้อมูลเพิ่มเติม",
+    modalPhotoLabel: "แนบรูปถ่ายสถานที่หรือผู้ป่วย (ไม่บังคับ)",
+    modalPhotoPlaceholder: "กดเพื่อเลือกรูปภาพ หรือถ่ายภาพ",
+    modalPhotoHint: "รองรับไฟล์รูปถ่ายสูงสุด 5MB",
+    modalLocationLabel: "ตำแหน่งปัจจุบัน (ตรวจจับอัตโนมัติ)",
+    modalLocationSearching: "กำลังตรวจหาตำแหน่งพิกัด...",
+    modalLocationAccuracy: "ละติจูด {lat}, ลองจิจูด {lng} (แม่นยำ ±{accuracy} ม.)",
+    modalLocationDenied: "เข้าถึงตำแหน่งไม่ได้เนื่องจากไม่ได้รับสิทธิ์",
+    modalLocationUnavailable: "อุปกรณ์ไม่รองรับการตรวจหาพิกัดตำแหน่ง",
+    modalLocationTimeout: "การค้นหาตำแหน่งพิกัดหมดเวลา",
+    modalCancelBtn: "ยกเลิก",
+    modalSubmitBtn: "โทรและส่งข้อมูล"
   },
   en: {
     title: "Thailand Emergency Hotlines",
@@ -405,7 +426,28 @@ const UI_STRINGS = {
     },
     announcementFound: "Found {count} hotlines matching your filters",
     announcementEmpty: "No hotlines found matching query",
-    developedBy: "Developed by Digital Government Development Agency (Public Organization) (DGA)"
+    developedBy: "Developed by Digital Government Development Agency (Public Organization) (DGA)",
+    
+    // 1669 Modal Strings
+    modalTitle: "Emergency Report - Rescue 1669",
+    modalFastCall: "Call 1669 Hotline Directly",
+    modalFastCallHint: "Direct voice call to rescue dispatch for maximum speed",
+    modalDivider: "Or specify additional details to report",
+    modalPatientLabel: "Who is the patient?",
+    modalPatientSelf: "Myself",
+    modalPatientOthers: "Others",
+    modalSymptomsLabel: "Symptoms / Additional Info",
+    modalPhotoLabel: "Attach Photo of Patient/Location (Optional)",
+    modalPhotoPlaceholder: "Click to select or capture a photo",
+    modalPhotoHint: "Supports photo upload up to 5MB",
+    modalLocationLabel: "Current Location (Auto-detected)",
+    modalLocationSearching: "Retrieving coordinates...",
+    modalLocationAccuracy: "{lat}° N, {lng}° E — accuracy ±{accuracy} m",
+    modalLocationDenied: "Location permission denied by user",
+    modalLocationUnavailable: "Location info unavailable on this device",
+    modalLocationTimeout: "Location retrieval timed out",
+    modalCancelBtn: "Cancel",
+    modalSubmitBtn: "Call & Send Info"
   }
 };
 
@@ -413,6 +455,13 @@ const UI_STRINGS = {
 let currentLang = localStorage.getItem("emergency_lang") || "th";
 let activeCategory = "all";
 let searchQuery = "";
+
+// 1669 Modal State
+let selectedPatient = "self"; // "self" or "others"
+let selectedSymptoms = new Set();
+let locationWatchId = null;
+let currentCoords = null; // { lat, lng, accuracy }
+let attachedPhotoData = null; // Base64 image data
 
 // DOM Elements
 const elements = {
@@ -434,7 +483,36 @@ const elements = {
   emptyStateDesc: document.getElementById("empty-state-desc"),
   footerText: document.getElementById("footer-text"),
   footerDisclaimer: document.getElementById("footer-disclaimer"),
-  a11yAnnouncer: document.getElementById("a11y-announcer")
+  a11yAnnouncer: document.getElementById("a11y-announcer"),
+  
+  // 1669 Modal elements
+  modal1669: document.getElementById("modal-1669"),
+  modalTitle: document.getElementById("modal-title"),
+  modalCloseBtn: document.getElementById("modal-close-btn"),
+  modalFastCallBtn: document.getElementById("modal-fast-call-btn"),
+  fastCallText: document.getElementById("fast-call-text"),
+  fastCallHint: document.getElementById("fast-call-hint"),
+  modalDividerText: document.getElementById("modal-divider-text"),
+  labelPatient: document.getElementById("label-patient"),
+  patientSelf: document.getElementById("patient-self"),
+  patientOthers: document.getElementById("patient-others"),
+  textSelf: document.getElementById("text-self"),
+  textOthers: document.getElementById("text-others"),
+  labelSymptoms: document.getElementById("label-symptoms"),
+  symptomChips: document.getElementById("symptom-chips"),
+  labelPhoto: document.getElementById("label-photo"),
+  photoUploaderTarget: document.getElementById("photo-uploader-target"),
+  modalPhotoInput: document.getElementById("modal-photo-input"),
+  uploaderText: document.getElementById("uploader-text"),
+  uploaderHint: document.getElementById("uploader-hint"),
+  photoPreviewWrapper: document.getElementById("photo-preview-wrapper"),
+  photoPreviewImg: document.getElementById("photo-preview-img"),
+  photoRemoveBtn: document.getElementById("photo-remove-btn"),
+  textLocationLabel: document.getElementById("text-location-label"),
+  locationCoords: document.getElementById("location-coords"),
+  modalCancelBtn: document.getElementById("modal-cancel-btn"),
+  modalSubmitBtn: document.getElementById("modal-submit-btn"),
+  textSubmitBtn: document.getElementById("text-submit-btn")
 };
 
 // Initialize Application
@@ -469,6 +547,22 @@ function setupLanguage(lang) {
   elements.quickCallTitle.textContent = UI_STRINGS[lang].quickCallTitle;
   elements.footerDisclaimer.textContent = UI_STRINGS[lang].disclaimer;
   
+  // Translate 1669 Modal UI Elements
+  elements.modalTitle.textContent = UI_STRINGS[lang].modalTitle;
+  elements.fastCallText.textContent = UI_STRINGS[lang].modalFastCall;
+  elements.fastCallHint.textContent = UI_STRINGS[lang].modalFastCallHint;
+  elements.modalDividerText.textContent = UI_STRINGS[lang].modalDivider;
+  elements.labelPatient.textContent = UI_STRINGS[lang].modalPatientLabel;
+  elements.textSelf.textContent = UI_STRINGS[lang].modalPatientSelf;
+  elements.textOthers.textContent = UI_STRINGS[lang].modalPatientOthers;
+  elements.labelSymptoms.textContent = UI_STRINGS[lang].modalSymptomsLabel;
+  elements.labelPhoto.textContent = UI_STRINGS[lang].modalPhotoLabel;
+  elements.uploaderText.textContent = UI_STRINGS[lang].modalPhotoPlaceholder;
+  elements.uploaderHint.textContent = UI_STRINGS[lang].modalPhotoHint;
+  elements.textLocationLabel.textContent = UI_STRINGS[lang].modalLocationLabel;
+  elements.modalCancelBtn.textContent = UI_STRINGS[lang].modalCancelBtn;
+  elements.textSubmitBtn.textContent = UI_STRINGS[lang].modalSubmitBtn;
+  
   // Set current year dynamically in footer
   elements.footerText.innerHTML = `&copy; ${new Date().getFullYear()} ${UI_STRINGS[lang].title} | ${UI_STRINGS[lang].developedBy}`;
 
@@ -476,6 +570,10 @@ function setupLanguage(lang) {
   renderCategories();
   renderQuickCards();
   renderList();
+  
+  // Render symptom chips and location coordinates
+  renderSymptomChips();
+  updateLocationDisplay();
 }
 
 // Render Category Navigation Tabs
@@ -685,4 +783,283 @@ function setupEventListeners() {
       elements.searchBar.select();
     }
   });
+
+  // Intercept calling 1669 clicks
+  document.addEventListener("click", (e) => {
+    const callLink = e.target.closest('a[href^="tel:1669"]');
+    if (callLink) {
+      e.preventDefault();
+      open1669Modal();
+    }
+  });
+
+  // Modal Cancel and Close Buttons
+  elements.modalCloseBtn.addEventListener("click", close1669Modal);
+  elements.modalCancelBtn.addEventListener("click", close1669Modal);
+  elements.modal1669.addEventListener("click", (e) => {
+    if (e.target === elements.modal1669) {
+      close1669Modal();
+    }
+  });
+
+  // Patient Selection buttons
+  elements.patientSelf.addEventListener("click", () => {
+    selectedPatient = "self";
+    elements.patientSelf.classList.add("active");
+    elements.patientSelf.setAttribute("aria-pressed", "true");
+    elements.patientOthers.classList.remove("active");
+    elements.patientOthers.setAttribute("aria-pressed", "false");
+  });
+  
+  elements.patientOthers.addEventListener("click", () => {
+    selectedPatient = "others";
+    elements.patientOthers.classList.add("active");
+    elements.patientOthers.setAttribute("aria-pressed", "true");
+    elements.patientSelf.classList.remove("active");
+    elements.patientSelf.setAttribute("aria-pressed", "false");
+  });
+
+  // Photo Uploader Input and remove btn
+  elements.photoUploaderTarget.addEventListener("click", (e) => {
+    if (e.target !== elements.modalPhotoInput && e.target !== elements.photoRemoveBtn && !elements.photoRemoveBtn.contains(e.target)) {
+      elements.modalPhotoInput.click();
+    }
+  });
+
+  elements.modalPhotoInput.addEventListener("change", (e) => {
+    if (e.target.files && e.target.files[0]) {
+      handlePhotoUpload(e.target.files[0]);
+    }
+  });
+  
+  elements.photoRemoveBtn.addEventListener("click", (e) => {
+    e.stopPropagation(); // prevent file input click from triggering
+    attachedPhotoData = null;
+    elements.modalPhotoInput.value = "";
+    elements.photoPreviewWrapper.style.display = "none";
+    elements.photoPreviewImg.src = "";
+    elements.photoUploaderTarget.querySelector(".photo-uploader-content").style.display = "flex";
+  });
+
+  // Submit Action Button
+  elements.modalSubmitBtn.addEventListener("click", () => {
+    // Compile details
+    const reportData = {
+      patient: selectedPatient,
+      symptoms: Array.from(selectedSymptoms),
+      location: currentCoords ? {
+        latitude: currentCoords.lat,
+        longitude: currentCoords.lng,
+        accuracy_meters: currentCoords.accuracy
+      } : "not_available",
+      photo_attached: attachedPhotoData ? "yes (base64 image)" : "no"
+    };
+    
+    console.log("🚑 EMERGENCY 1669 REPORT PAYLOAD:", reportData);
+    
+    let alertMsg = "";
+    if (currentLang === "th") {
+      alertMsg = `ส่งข้อมูลกู้ชีพ 1669:\n` +
+                 `- ผู้ป่วย: ${selectedPatient === "self" ? "ตัวเอง" : "ผู้อื่น"}\n` +
+                 `- อาการ: ${reportData.symptoms.map(s => SYMPTOMS_DATA.find(x => x.id === s).th).join(", ") || "ไม่ระบุ"}\n` +
+                 `- พิกัด: ${currentCoords ? `${currentCoords.lat}, ${currentCoords.lng} (±${currentCoords.accuracy} ม.)` : "ไม่พบพิกัด"}\n` +
+                 `- รูปถ่าย: ${attachedPhotoData ? "แนบแล้ว" : "ไม่ได้แนบ"}\n\n` +
+                 `ระบบจะเริ่มทำการโทรออกไปยังหมายเลข 1669 ทันที`;
+    } else {
+      alertMsg = `Sending 1669 Rescue Info:\n` +
+                 `- Patient: ${selectedPatient === "self" ? "Myself" : "Others"}\n` +
+                 `- Symptoms: ${reportData.symptoms.map(s => SYMPTOMS_DATA.find(x => x.id === s).en).join(", ") || "None"}\n` +
+                 `- Coordinates: ${currentCoords ? `${currentCoords.lat}, ${currentCoords.lng} (±${currentCoords.accuracy}m)` : "Not detected"}\n` +
+                 `- Photo: ${attachedPhotoData ? "Attached" : "None"}\n\n` +
+                 `The device will now dial the 1669 hotline.`;
+    }
+    
+    alert(alertMsg);
+    
+    close1669Modal();
+    window.location.href = "tel:1669";
+  });
+}
+
+// Symptoms Dataset for the 1669 Modal
+const SYMPTOMS_DATA = [
+  { id: "accident", th: "อุบัติเหตุ", en: "Accident", icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.27-3.82c.1-.3.38-.51.7-.51h10.05c.32 0 .61.21.7.51L19 11H5z"/></svg>` },
+  { id: "stroke", th: "เส้นเลือดในสมองแตก", en: "Stroke / Brain bleed", icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.25z"/></svg>` },
+  { id: "seizure", th: "ลมชัก", en: "Seizure", icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 6c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm10 5h-7.67l-2.03-3.03C12.11 7.69 11.75 7.5 11.36 7.5h-.01c-.39 0-.75.19-.94.47L7.66 12H2v2h6.64l1.63-2.45L12 14.88V22h2v-8.15l-2.22-3.33L15 13h7v-2z"/></svg>` },
+  { id: "fever", th: "ไข้สูง", en: "High Fever", icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M15 13V5c0-1.66-1.34-3-3-3S9 3.34 9 5v8c-1.21.91-2 2.37-2 4 0 2.76 2.24 5 5 5s5-2.24 5-5c0-1.63-.79-3.09-2-4zm-3-9c.55 0 1 .45 1 1v3h-2V5c0-.55.45-1 1-1z"/></svg>` },
+  { id: "female", th: "เพศหญิง", en: "Female", icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 2c-2.76 0-5 2.24-5 5 0 2.05 1.23 3.81 3 4.58V14H9.5v2H10v3h4v-3h.5v-2H14v-2.42c1.77-.77 3-2.53 3-4.58 0-2.76-2.24-5-5-5zm0 8c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"/></svg>` },
+  { id: "male", th: "เพศชาย", en: "Male", icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 2c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 8c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm8-8h-6v2h3.59L13 8.59c-.83-.37-1.75-.59-2.73-.59C6.46 8 3.5 10.96 3.5 14.73 3.5 18.5 6.46 21.46 10.23 21.46c3.77 0 6.73-2.96 6.73-6.73 0-.98-.22-1.9-.59-2.73L20 8.41V12h2V2z"/></svg>` },
+  { id: "others", th: "อื่นๆ", en: "Others", icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>` }
+];
+
+// Render Symptom Chips dynamically inside modal
+function renderSymptomChips() {
+  if (!elements.symptomChips) return;
+  elements.symptomChips.innerHTML = "";
+  
+  SYMPTOMS_DATA.forEach(symptom => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = `symptom-chip ${selectedSymptoms.has(symptom.id) ? "active" : ""}`;
+    btn.setAttribute("data-tag", symptom.id);
+    btn.setAttribute("aria-pressed", selectedSymptoms.has(symptom.id) ? "true" : "false");
+    
+    const labelText = currentLang === "th" ? symptom.th : symptom.en;
+    btn.innerHTML = `
+      ${symptom.icon}
+      <span>${labelText}</span>
+    `;
+    
+    btn.addEventListener("click", () => {
+      if (selectedSymptoms.has(symptom.id)) {
+        selectedSymptoms.delete(symptom.id);
+        btn.classList.remove("active");
+        btn.setAttribute("aria-pressed", "false");
+      } else {
+        selectedSymptoms.add(symptom.id);
+        btn.classList.add("active");
+        btn.setAttribute("aria-pressed", "true");
+      }
+    });
+    
+    elements.symptomChips.appendChild(btn);
+  });
+}
+
+// 1669 Modal Handlers
+function open1669Modal() {
+  document.body.classList.add("modal-open");
+  elements.modal1669.style.display = "flex";
+  
+  // Reset fields to default
+  selectedPatient = "self";
+  elements.patientSelf.classList.add("active");
+  elements.patientSelf.setAttribute("aria-pressed", "true");
+  elements.patientOthers.classList.remove("active");
+  elements.patientOthers.setAttribute("aria-pressed", "false");
+  
+  selectedSymptoms.clear();
+  renderSymptomChips();
+  
+  // Reset photo input uploader
+  attachedPhotoData = null;
+  elements.modalPhotoInput.value = "";
+  elements.photoPreviewWrapper.style.display = "none";
+  elements.photoPreviewImg.src = "";
+  elements.photoUploaderTarget.querySelector(".photo-uploader-content").style.display = "flex";
+  
+  // Geolocation trigger
+  currentCoords = null;
+  updateLocationDisplay();
+  startGeolocation();
+}
+
+function close1669Modal() {
+  document.body.classList.remove("modal-open");
+  elements.modal1669.style.display = "none";
+  stopGeolocation();
+}
+
+// Geolocation functions
+function startGeolocation() {
+  if (!navigator.geolocation) {
+    elements.locationCoords.textContent = UI_STRINGS[currentLang].modalLocationUnavailable;
+    return;
+  }
+  
+  elements.locationCoords.textContent = UI_STRINGS[currentLang].modalLocationSearching;
+  
+  // Get initial fast coordinates
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      currentCoords = {
+        lat: position.coords.latitude.toFixed(6),
+        lng: position.coords.longitude.toFixed(6),
+        accuracy: Math.round(position.coords.accuracy)
+      };
+      updateLocationDisplay();
+    },
+    (error) => {
+      handleLocationError(error);
+    },
+    { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+  );
+  
+  // Watch location coordinates live
+  locationWatchId = navigator.geolocation.watchPosition(
+    (position) => {
+      currentCoords = {
+        lat: position.coords.latitude.toFixed(6),
+        lng: position.coords.longitude.toFixed(6),
+        accuracy: Math.round(position.coords.accuracy)
+      };
+      updateLocationDisplay();
+    },
+    (error) => {
+      if (!currentCoords) {
+        handleLocationError(error);
+      }
+    },
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+  );
+}
+
+function stopGeolocation() {
+  if (locationWatchId !== null) {
+    navigator.geolocation.clearWatch(locationWatchId);
+    locationWatchId = null;
+  }
+}
+
+function handleLocationError(error) {
+  let msg = "";
+  switch (error.code) {
+    case error.PERMISSION_DENIED:
+      msg = UI_STRINGS[currentLang].modalLocationDenied;
+      break;
+    case error.POSITION_UNAVAILABLE:
+      msg = UI_STRINGS[currentLang].modalLocationUnavailable;
+      break;
+    case error.TIMEOUT:
+      msg = UI_STRINGS[currentLang].modalLocationTimeout;
+      break;
+    default:
+      msg = error.message;
+  }
+  elements.locationCoords.textContent = msg;
+}
+
+function updateLocationDisplay() {
+  if (!currentCoords) {
+    if (elements.locationCoords.textContent === "") {
+      elements.locationCoords.textContent = UI_STRINGS[currentLang].modalLocationSearching;
+    }
+    return;
+  }
+  
+  const template = UI_STRINGS[currentLang].modalLocationAccuracy;
+  elements.locationCoords.textContent = template
+    .replace("{lat}", currentCoords.lat)
+    .replace("{lng}", currentCoords.lng)
+    .replace("{accuracy}", currentCoords.accuracy);
+}
+
+// File photo upload handling
+function handlePhotoUpload(file) {
+  if (!file) return;
+  
+  if (file.size > 5 * 1024 * 1024) {
+    alert(currentLang === "th" ? "ขนาดรูปภาพห้ามเกิน 5MB" : "Image size must not exceed 5MB");
+    elements.modalPhotoInput.value = "";
+    return;
+  }
+  
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    attachedPhotoData = e.target.result;
+    elements.photoPreviewImg.src = attachedPhotoData;
+    elements.photoPreviewWrapper.style.display = "flex";
+    elements.photoUploaderTarget.querySelector(".photo-uploader-content").style.display = "none";
+  };
+  reader.readAsDataURL(file);
 }
