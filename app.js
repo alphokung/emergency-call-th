@@ -590,21 +590,23 @@ function setupLanguage(lang) {
   elements.footerDisclaimer.textContent = UI_STRINGS[lang].disclaimer;
   
   // Translate 1669 Modal UI Elements
-  elements.modalTitle.textContent = UI_STRINGS[lang].modalTitle;
-  elements.fastCallText.textContent = UI_STRINGS[lang].modalFastCall;
-  elements.fastCallHint.textContent = UI_STRINGS[lang].modalFastCallHint;
-  elements.modalDividerText.textContent = UI_STRINGS[lang].modalDivider;
-  elements.labelPatient.textContent = UI_STRINGS[lang].modalPatientLabel;
-  elements.textSelf.textContent = UI_STRINGS[lang].modalPatientSelf;
-  elements.textOthers.textContent = UI_STRINGS[lang].modalPatientOthers;
-  elements.labelSymptoms.textContent = UI_STRINGS[lang].modalSymptomsLabel;
-  elements.labelPhoto.textContent = UI_STRINGS[lang].modalPhotoLabel;
-  elements.uploaderText.textContent = UI_STRINGS[lang].modalPhotoPlaceholder;
-  elements.uploaderHint.textContent = UI_STRINGS[lang].modalPhotoHint;
-  elements.textLocationLabel.textContent = UI_STRINGS[lang].modalLocationLabel;
-  elements.modalCancelBtn.textContent = UI_STRINGS[lang].modalCancelBtn;
-  elements.textSubmitBtn.textContent = UI_STRINGS[lang].modalSubmitBtn;
-  elements.otherSymptomText.placeholder = UI_STRINGS[lang].modalOtherSymptomPlaceholder;
+  if (elements.modal1669) {
+    elements.modalTitle.textContent = UI_STRINGS[lang].modalTitle;
+    elements.fastCallText.textContent = UI_STRINGS[lang].modalFastCall;
+    elements.fastCallHint.textContent = UI_STRINGS[lang].modalFastCallHint;
+    elements.modalDividerText.textContent = UI_STRINGS[lang].modalDivider;
+    elements.labelPatient.textContent = UI_STRINGS[lang].modalPatientLabel;
+    elements.textSelf.textContent = UI_STRINGS[lang].modalPatientSelf;
+    elements.textOthers.textContent = UI_STRINGS[lang].modalPatientOthers;
+    elements.labelSymptoms.textContent = UI_STRINGS[lang].modalSymptomsLabel;
+    elements.labelPhoto.textContent = UI_STRINGS[lang].modalPhotoLabel;
+    elements.uploaderText.textContent = UI_STRINGS[lang].modalPhotoPlaceholder;
+    elements.uploaderHint.textContent = UI_STRINGS[lang].modalPhotoHint;
+    elements.textLocationLabel.textContent = UI_STRINGS[lang].modalLocationLabel;
+    elements.modalCancelBtn.textContent = UI_STRINGS[lang].modalCancelBtn;
+    elements.textSubmitBtn.textContent = UI_STRINGS[lang].modalSubmitBtn;
+    elements.otherSymptomText.placeholder = UI_STRINGS[lang].modalOtherSymptomPlaceholder;
+  }
   
   // Set current year dynamically in footer
   elements.footerText.innerHTML = `&copy; ${new Date().getFullYear()} ${UI_STRINGS[lang].title} | ${UI_STRINGS[lang].developedBy}`;
@@ -822,117 +824,119 @@ function setupEventListeners() {
   });
 
   // Intercept calling 1669 clicks
-  document.addEventListener("click", (e) => {
-    const callLink = e.target.closest('a[href^="tel:1669"]');
-    if (callLink) {
-      if (callLink.id === "modal-fast-call-btn") {
-        close1669Modal();
-        return; // Allow direct dial action
+  if (elements.modal1669) {
+    document.addEventListener("click", (e) => {
+      const callLink = e.target.closest('a[href^="tel:1669"]');
+      if (callLink) {
+        if (callLink.id === "modal-fast-call-btn") {
+          close1669Modal();
+          return; // Allow direct dial action
+        }
+        e.preventDefault();
+        open1669Modal();
       }
-      e.preventDefault();
-      open1669Modal();
-    }
-  });
+    });
 
-  // Modal Cancel and Close Buttons
-  elements.modalCloseBtn.addEventListener("click", close1669Modal);
-  elements.modalCancelBtn.addEventListener("click", close1669Modal);
-  elements.modal1669.addEventListener("click", (e) => {
-    if (e.target === elements.modal1669) {
-      close1669Modal();
-    }
-  });
+    // Modal Cancel and Close Buttons
+    elements.modalCloseBtn.addEventListener("click", close1669Modal);
+    elements.modalCancelBtn.addEventListener("click", close1669Modal);
+    elements.modal1669.addEventListener("click", (e) => {
+      if (e.target === elements.modal1669) {
+        close1669Modal();
+      }
+    });
 
-  // Patient Selection buttons
-  elements.patientSelf.addEventListener("click", () => {
-    if (selectedPatient === "self") {
-      selectedPatient = null;
-      elements.patientSelf.classList.remove("active");
-      elements.patientSelf.setAttribute("aria-pressed", "false");
-    } else {
-      selectedPatient = "self";
-      elements.patientSelf.classList.add("active");
-      elements.patientSelf.setAttribute("aria-pressed", "true");
-      elements.patientOthers.classList.remove("active");
-      elements.patientOthers.setAttribute("aria-pressed", "false");
-    }
-  });
-  
-  elements.patientOthers.addEventListener("click", () => {
-    if (selectedPatient === "others") {
-      selectedPatient = null;
-      elements.patientOthers.classList.remove("active");
-      elements.patientOthers.setAttribute("aria-pressed", "false");
-    } else {
-      selectedPatient = "others";
-      elements.patientOthers.classList.add("active");
-      elements.patientOthers.setAttribute("aria-pressed", "true");
-      elements.patientSelf.classList.remove("active");
-      elements.patientSelf.setAttribute("aria-pressed", "false");
-    }
-  });
-
-  // Photo Uploader Input and remove btn
-  elements.photoUploaderTarget.addEventListener("click", (e) => {
-    if (e.target !== elements.modalPhotoInput && e.target !== elements.photoRemoveBtn && !elements.photoRemoveBtn.contains(e.target)) {
-      elements.modalPhotoInput.click();
-    }
-  });
-
-  elements.modalPhotoInput.addEventListener("change", (e) => {
-    if (e.target.files && e.target.files[0]) {
-      handlePhotoUpload(e.target.files[0]);
-    }
-  });
-  
-  elements.photoRemoveBtn.addEventListener("click", (e) => {
-    e.stopPropagation(); // prevent file input click from triggering
-    attachedPhotoData = null;
-    elements.modalPhotoInput.value = "";
-    elements.photoPreviewWrapper.style.display = "none";
-    elements.photoPreviewImg.src = "";
-    elements.photoUploaderTarget.querySelector(".photo-uploader-content").style.display = "flex";
-  });
-
-  // Submit Action Button
-  elements.modalSubmitBtn.addEventListener("click", () => {
-    const originalContent = elements.modalSubmitBtn.innerHTML;
-    elements.modalSubmitBtn.disabled = true;
+    // Patient Selection buttons
+    elements.patientSelf.addEventListener("click", () => {
+      if (selectedPatient === "self") {
+        selectedPatient = null;
+        elements.patientSelf.classList.remove("active");
+        elements.patientSelf.setAttribute("aria-pressed", "false");
+      } else {
+        selectedPatient = "self";
+        elements.patientSelf.classList.add("active");
+        elements.patientSelf.setAttribute("aria-pressed", "true");
+        elements.patientOthers.classList.remove("active");
+        elements.patientOthers.setAttribute("aria-pressed", "false");
+      }
+    });
     
-    const loadingText = currentLang === "th" ? "กำลังส่ง..." : "Sending...";
-    elements.modalSubmitBtn.innerHTML = `
-      <span class="material-symbols-outlined spinner">progress_activity</span>
-      <span>${UI_STRINGS[currentLang].modalCallingState}</span>
-    `;
+    elements.patientOthers.addEventListener("click", () => {
+      if (selectedPatient === "others") {
+        selectedPatient = null;
+        elements.patientOthers.classList.remove("active");
+        elements.patientOthers.setAttribute("aria-pressed", "false");
+      } else {
+        selectedPatient = "others";
+        elements.patientOthers.classList.add("active");
+        elements.patientOthers.setAttribute("aria-pressed", "true");
+        elements.patientSelf.classList.remove("active");
+        elements.patientSelf.setAttribute("aria-pressed", "false");
+      }
+    });
 
-    setTimeout(() => {
-      // Compile details
-      const reportData = {
-        patient: selectedPatient,
-        symptoms: Array.from(selectedSymptoms),
-        other_symptoms_detail: selectedSymptoms.has("others") ? elements.otherSymptomText.value.trim() : "",
-        location: currentCoords ? {
-          latitude: currentCoords.lat,
-          longitude: currentCoords.lng,
-          accuracy_meters: currentCoords.accuracy
-        } : "not_available",
-        photo_attached: attachedPhotoData ? "yes (base64 image)" : "no"
-      };
+    // Photo Uploader Input and remove btn
+    elements.photoUploaderTarget.addEventListener("click", (e) => {
+      if (e.target !== elements.modalPhotoInput && e.target !== elements.photoRemoveBtn && !elements.photoRemoveBtn.contains(e.target)) {
+        elements.modalPhotoInput.click();
+      }
+    });
+
+    elements.modalPhotoInput.addEventListener("change", (e) => {
+      if (e.target.files && e.target.files[0]) {
+        handlePhotoUpload(e.target.files[0]);
+      }
+    });
+    
+    elements.photoRemoveBtn.addEventListener("click", (e) => {
+      e.stopPropagation(); // prevent file input click from triggering
+      attachedPhotoData = null;
+      elements.modalPhotoInput.value = "";
+      elements.photoPreviewWrapper.style.display = "none";
+      elements.photoPreviewImg.src = "";
+      elements.photoUploaderTarget.querySelector(".photo-uploader-content").style.display = "flex";
+    });
+
+    // Submit Action Button
+    elements.modalSubmitBtn.addEventListener("click", () => {
+      const originalContent = elements.modalSubmitBtn.innerHTML;
+      elements.modalSubmitBtn.disabled = true;
       
-      console.log("🚑 EMERGENCY 1669 REPORT PAYLOAD:", reportData);
+      const loadingText = currentLang === "th" ? "กำลังส่ง..." : "Sending...";
+      elements.modalSubmitBtn.innerHTML = `
+        <span class="material-symbols-outlined spinner">progress_activity</span>
+        <span>${loadingText}</span>
+      `;
 
-      // Show Toast success message
-      showToast(UI_STRINGS[currentLang].modalToastSuccess);
+      setTimeout(() => {
+        // Compile details
+        const reportData = {
+          patient: selectedPatient,
+          symptoms: Array.from(selectedSymptoms),
+          other_symptoms_detail: selectedSymptoms.has("others") ? elements.otherSymptomText.value.trim() : "",
+          location: currentCoords ? {
+            latitude: currentCoords.lat,
+            longitude: currentCoords.lng,
+            accuracy_meters: currentCoords.accuracy
+          } : "not_available",
+          photo_attached: attachedPhotoData ? "yes (base64 image)" : "no"
+        };
+        
+        console.log("🚑 EMERGENCY 1669 REPORT PAYLOAD:", reportData);
 
-      // Reset button states & close modal
-      elements.modalSubmitBtn.disabled = false;
-      elements.modalSubmitBtn.innerHTML = originalContent;
-      close1669Modal();
+        // Show Toast success message
+        showToast(UI_STRINGS[currentLang].modalToastSuccess);
 
-      // Instantly trigger the native call action
-      window.location.href = "tel:1669";
-    }, 100);
-  });
+        // Reset button states & close modal
+        elements.modalSubmitBtn.disabled = false;
+        elements.modalSubmitBtn.innerHTML = originalContent;
+        close1669Modal();
+
+        // Instantly trigger the native call action
+        window.location.href = "tel:1669";
+      }, 100);
+    });
+  }
 }
 
 // Symptoms Dataset for the 1669 Modal
@@ -993,6 +997,7 @@ function renderSymptomChips() {
 
 // 1669 Modal Handlers
 function open1669Modal() {
+  if (!elements.modal1669) return;
   document.body.classList.add("modal-open");
   elements.modal1669.style.display = "flex";
   
@@ -1023,6 +1028,7 @@ function open1669Modal() {
 }
 
 function close1669Modal() {
+  if (!elements.modal1669) return;
   document.body.classList.remove("modal-open");
   elements.modal1669.style.display = "none";
   stopGeolocation();
@@ -1098,6 +1104,7 @@ function handleLocationError(error) {
 }
 
 function updateLocationDisplay() {
+  if (!elements.locationCoords) return;
   if (!currentCoords) {
     if (elements.locationCoords.textContent === "") {
       elements.locationCoords.textContent = UI_STRINGS[currentLang].modalLocationSearching;
