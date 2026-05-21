@@ -400,7 +400,8 @@ const UI_STRINGS = {
     modalLocationUnavailable: "อุปกรณ์ไม่รองรับการตรวจหาพิกัดตำแหน่ง",
     modalLocationTimeout: "การค้นหาตำแหน่งพิกัดหมดเวลา",
     modalCancelBtn: "ยกเลิก",
-    modalSubmitBtn: "โทรและส่งข้อมูล"
+    modalSubmitBtn: "โทรและส่งข้อมูล",
+    modalOtherSymptomPlaceholder: "ระบุอาการเพิ่มเติม..."
   },
   en: {
     title: "Thailand Emergency Hotlines",
@@ -447,7 +448,8 @@ const UI_STRINGS = {
     modalLocationUnavailable: "Location info unavailable on this device",
     modalLocationTimeout: "Location retrieval timed out",
     modalCancelBtn: "Cancel",
-    modalSubmitBtn: "Call & Send Info"
+    modalSubmitBtn: "Call & Send Info",
+    modalOtherSymptomPlaceholder: "Specify other symptoms..."
   }
 };
 
@@ -512,7 +514,9 @@ const elements = {
   locationCoords: document.getElementById("location-coords"),
   modalCancelBtn: document.getElementById("modal-cancel-btn"),
   modalSubmitBtn: document.getElementById("modal-submit-btn"),
-  textSubmitBtn: document.getElementById("text-submit-btn")
+  textSubmitBtn: document.getElementById("text-submit-btn"),
+  otherSymptomInputGroup: document.getElementById("other-symptom-input-group"),
+  otherSymptomText: document.getElementById("other-symptom-text")
 };
 
 // Initialize Application
@@ -562,6 +566,7 @@ function setupLanguage(lang) {
   elements.textLocationLabel.textContent = UI_STRINGS[lang].modalLocationLabel;
   elements.modalCancelBtn.textContent = UI_STRINGS[lang].modalCancelBtn;
   elements.textSubmitBtn.textContent = UI_STRINGS[lang].modalSubmitBtn;
+  elements.otherSymptomText.placeholder = UI_STRINGS[lang].modalOtherSymptomPlaceholder;
   
   // Set current year dynamically in footer
   elements.footerText.innerHTML = `&copy; ${new Date().getFullYear()} ${UI_STRINGS[lang].title} | ${UI_STRINGS[lang].developedBy}`;
@@ -851,6 +856,7 @@ function setupEventListeners() {
     const reportData = {
       patient: selectedPatient,
       symptoms: Array.from(selectedSymptoms),
+      other_symptoms_detail: selectedSymptoms.has("others") ? elements.otherSymptomText.value.trim() : "",
       location: currentCoords ? {
         latitude: currentCoords.lat,
         longitude: currentCoords.lng,
@@ -863,16 +869,24 @@ function setupEventListeners() {
     
     let alertMsg = "";
     if (currentLang === "th") {
+      let symptomsText = reportData.symptoms.map(s => SYMPTOMS_DATA.find(x => x.id === s).th).join(", ");
+      if (selectedSymptoms.has("others") && reportData.other_symptoms_detail) {
+        symptomsText += ` (${reportData.other_symptoms_detail})`;
+      }
       alertMsg = `ส่งข้อมูลกู้ชีพ 1669:\n` +
                  `- ผู้ป่วย: ${selectedPatient === "self" ? "ตัวเอง" : "ผู้อื่น"}\n` +
-                 `- อาการ: ${reportData.symptoms.map(s => SYMPTOMS_DATA.find(x => x.id === s).th).join(", ") || "ไม่ระบุ"}\n` +
+                 `- อาการ: ${symptomsText || "ไม่ระบุ"}\n` +
                  `- พิกัด: ${currentCoords ? `${currentCoords.lat}, ${currentCoords.lng} (±${currentCoords.accuracy} ม.)` : "ไม่พบพิกัด"}\n` +
                  `- รูปถ่าย: ${attachedPhotoData ? "แนบแล้ว" : "ไม่ได้แนบ"}\n\n` +
                  `ระบบจะเริ่มทำการโทรออกไปยังหมายเลข 1669 ทันที`;
     } else {
+      let symptomsText = reportData.symptoms.map(s => SYMPTOMS_DATA.find(x => x.id === s).en).join(", ");
+      if (selectedSymptoms.has("others") && reportData.other_symptoms_detail) {
+        symptomsText += ` (${reportData.other_symptoms_detail})`;
+      }
       alertMsg = `Sending 1669 Rescue Info:\n` +
                  `- Patient: ${selectedPatient === "self" ? "Myself" : "Others"}\n` +
-                 `- Symptoms: ${reportData.symptoms.map(s => SYMPTOMS_DATA.find(x => x.id === s).en).join(", ") || "None"}\n` +
+                 `- Symptoms: ${symptomsText || "None"}\n` +
                  `- Coordinates: ${currentCoords ? `${currentCoords.lat}, ${currentCoords.lng} (±${currentCoords.accuracy}m)` : "Not detected"}\n` +
                  `- Photo: ${attachedPhotoData ? "Attached" : "None"}\n\n` +
                  `The device will now dial the 1669 hotline.`;
@@ -924,6 +938,17 @@ function renderSymptomChips() {
         btn.classList.add("active");
         btn.setAttribute("aria-pressed", "true");
       }
+      
+      // If others chip clicked, show/hide the custom symptom textbox
+      if (symptom.id === "others") {
+        if (selectedSymptoms.has("others")) {
+          elements.otherSymptomInputGroup.style.display = "block";
+          elements.otherSymptomText.focus();
+        } else {
+          elements.otherSymptomInputGroup.style.display = "none";
+          elements.otherSymptomText.value = "";
+        }
+      }
     });
     
     elements.symptomChips.appendChild(btn);
@@ -944,6 +969,9 @@ function open1669Modal() {
   
   selectedSymptoms.clear();
   renderSymptomChips();
+  
+  elements.otherSymptomInputGroup.style.display = "none";
+  elements.otherSymptomText.value = "";
   
   // Reset photo input uploader
   attachedPhotoData = null;

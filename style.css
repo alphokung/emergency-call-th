@@ -1037,6 +1037,25 @@ body {
   color: var(--text-dark-primary);
 }
 
+.form-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--spacing-md);
+  border: 1px solid var(--neutral-80);
+  border-radius: var(--border-radius-md);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-body-m);
+  background-color: var(--canvas-white);
+  color: var(--text-dark-primary);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-input:focus {
+  border-color: var(--primary-30-base);
+  box-shadow: 0 0 0 3px rgba(0, 136, 88, 0.1);
+}
+
 /* Patient Selector Grid */
 .patient-selector-grid {
   display: grid;
