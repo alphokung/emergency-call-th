@@ -938,7 +938,7 @@ function setupEventListeners() {
 // Symptoms Dataset for the 1669 Modal
 const SYMPTOMS_DATA = [
   { id: "accident", th: "อุบัติเหตุ", en: "Accident", icon: `<span class="material-symbols-outlined">car_crash</span>` },
-  { id: "stroke", th: "เส้นเลือดในสมองแตก", en: "Stroke / Brain bleed", icon: `<span class="material-symbols-outlined">brain</span>` },
+  { id: "stroke", th: "เส้นเลือดในสมองแตก", en: "Stroke / Brain bleed", icon: `<span class="material-symbols-outlined">network_intelligence</span>` },
   { id: "seizure", th: "ลมชัก", en: "Seizure", icon: `<span class="material-symbols-outlined">personal_injury</span>` },
   { id: "fever", th: "ไข้สูง", en: "High Fever", icon: `<span class="material-symbols-outlined">thermostat</span>` },
   { id: "female", th: "เพศหญิง", en: "Female", icon: `<span class="material-symbols-outlined">female</span>` },
