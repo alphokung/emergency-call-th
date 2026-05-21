@@ -745,7 +745,7 @@ function renderList() {
     } else if (item.category === "police") {
       catIcon = `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`;
     } else if (item.category === "fire") {
-      catIcon = `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>`;
+      catIcon = `<span class="icon-call" aria-hidden="true" style="width: 12px; height: 12px;"></span>`;
     }
     
     const categoryLabel = UI_STRINGS[currentLang].categories[item.category];
