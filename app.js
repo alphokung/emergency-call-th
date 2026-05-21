@@ -401,7 +401,8 @@ const UI_STRINGS = {
     modalLocationTimeout: "การค้นหาตำแหน่งพิกัดหมดเวลา",
     modalCancelBtn: "ยกเลิก",
     modalSubmitBtn: "โทรและส่งข้อมูล",
-    modalOtherSymptomPlaceholder: "ระบุอาการเพิ่มเติม..."
+    modalOtherSymptomPlaceholder: "ระบุอาการเพิ่มเติม...",
+    modalToastSuccess: "ส่งข้อมูลถึงหน่วยงานสำเร็จ"
   },
   en: {
     title: "Thailand Emergency Hotlines",
@@ -449,7 +450,8 @@ const UI_STRINGS = {
     modalLocationTimeout: "Location retrieval timed out",
     modalCancelBtn: "Cancel",
     modalSubmitBtn: "Call & Send Info",
-    modalOtherSymptomPlaceholder: "Specify other symptoms..."
+    modalOtherSymptomPlaceholder: "Specify other symptoms...",
+    modalToastSuccess: "Data sent to agency successfully"
   }
 };
 
@@ -852,50 +854,44 @@ function setupEventListeners() {
 
   // Submit Action Button
   elements.modalSubmitBtn.addEventListener("click", () => {
-    // Compile details
-    const reportData = {
-      patient: selectedPatient,
-      symptoms: Array.from(selectedSymptoms),
-      other_symptoms_detail: selectedSymptoms.has("others") ? elements.otherSymptomText.value.trim() : "",
-      location: currentCoords ? {
-        latitude: currentCoords.lat,
-        longitude: currentCoords.lng,
-        accuracy_meters: currentCoords.accuracy
-      } : "not_available",
-      photo_attached: attachedPhotoData ? "yes (base64 image)" : "no"
-    };
+    const originalContent = elements.modalSubmitBtn.innerHTML;
+    elements.modalSubmitBtn.disabled = true;
     
-    console.log("🚑 EMERGENCY 1669 REPORT PAYLOAD:", reportData);
-    
-    let alertMsg = "";
-    if (currentLang === "th") {
-      let symptomsText = reportData.symptoms.map(s => SYMPTOMS_DATA.find(x => x.id === s).th).join(", ");
-      if (selectedSymptoms.has("others") && reportData.other_symptoms_detail) {
-        symptomsText += ` (${reportData.other_symptoms_detail})`;
-      }
-      alertMsg = `ส่งข้อมูลกู้ชีพ 1669:\n` +
-                 `- ผู้ป่วย: ${selectedPatient === "self" ? "ตัวเอง" : "ผู้อื่น"}\n` +
-                 `- อาการ: ${symptomsText || "ไม่ระบุ"}\n` +
-                 `- พิกัด: ${currentCoords ? `${currentCoords.lat}, ${currentCoords.lng} (±${currentCoords.accuracy} ม.)` : "ไม่พบพิกัด"}\n` +
-                 `- รูปถ่าย: ${attachedPhotoData ? "แนบแล้ว" : "ไม่ได้แนบ"}\n\n` +
-                 `ระบบจะเริ่มทำการโทรออกไปยังหมายเลข 1669 ทันที`;
-    } else {
-      let symptomsText = reportData.symptoms.map(s => SYMPTOMS_DATA.find(x => x.id === s).en).join(", ");
-      if (selectedSymptoms.has("others") && reportData.other_symptoms_detail) {
-        symptomsText += ` (${reportData.other_symptoms_detail})`;
-      }
-      alertMsg = `Sending 1669 Rescue Info:\n` +
-                 `- Patient: ${selectedPatient === "self" ? "Myself" : "Others"}\n` +
-                 `- Symptoms: ${symptomsText || "None"}\n` +
-                 `- Coordinates: ${currentCoords ? `${currentCoords.lat}, ${currentCoords.lng} (±${currentCoords.accuracy}m)` : "Not detected"}\n` +
-                 `- Photo: ${attachedPhotoData ? "Attached" : "None"}\n\n` +
-                 `The device will now dial the 1669 hotline.`;
-    }
-    
-    alert(alertMsg);
-    
-    close1669Modal();
-    window.location.href = "tel:1669";
+    const loadingText = currentLang === "th" ? "กำลังส่ง..." : "Sending...";
+    elements.modalSubmitBtn.innerHTML = `
+      <svg class="spinner" viewBox="0 0 50 50">
+        <circle class="path" cx="25" cy="25" r="20" fill="none" stroke="currentColor" stroke-width="5"></circle>
+      </svg>
+      <span>${loadingText}</span>
+    `;
+
+    setTimeout(() => {
+      // Compile details
+      const reportData = {
+        patient: selectedPatient,
+        symptoms: Array.from(selectedSymptoms),
+        other_symptoms_detail: selectedSymptoms.has("others") ? elements.otherSymptomText.value.trim() : "",
+        location: currentCoords ? {
+          latitude: currentCoords.lat,
+          longitude: currentCoords.lng,
+          accuracy_meters: currentCoords.accuracy
+        } : "not_available",
+        photo_attached: attachedPhotoData ? "yes (base64 image)" : "no"
+      };
+      
+      console.log("🚑 EMERGENCY 1669 REPORT PAYLOAD:", reportData);
+
+      // Show Toast success message
+      showToast(UI_STRINGS[currentLang].modalToastSuccess);
+
+      // Reset button states & close modal
+      elements.modalSubmitBtn.disabled = false;
+      elements.modalSubmitBtn.innerHTML = originalContent;
+      close1669Modal();
+
+      // Instantly trigger the native call action
+      window.location.href = "tel:1669";
+    }, 100);
   });
 }
 
@@ -1094,4 +1090,29 @@ function handlePhotoUpload(file) {
     elements.photoUploaderTarget.querySelector(".photo-uploader-content").style.display = "none";
   };
   reader.readAsDataURL(file);
+}
+
+// Show a premium toast notification
+function showToast(message) {
+  const toast = document.createElement("div");
+  toast.className = "toast-notification";
+  toast.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#10b981" width="20" height="20">
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+    </svg>
+    <span>${message}</span>
+  `;
+  document.body.appendChild(toast);
+  
+  // Trigger layout reflow for animation
+  toast.offsetHeight; 
+  toast.classList.add("show");
+  
+  // Slide out and remove
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => {
+      toast.remove();
+    }, 300);
+  }, 2700);
 }
