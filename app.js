@@ -130,6 +130,24 @@ const EMERGENCY_NUMBERS = [
     isQuickCall: false
   },
   {
+    id: "1543",
+    number: "1543",
+    category: "police",
+    name: {
+      th: "สายด่วนการทางพิเศษแห่งประเทศไทย (EXAT Call Center)",
+      en: "EXAT Call Center (Expressway Authority of Thailand)"
+    },
+    desc: {
+      th: "แจ้งเหตุฉุกเฉิน อุบัติเหตุ หรือขอความช่วยเหลือรถเสียบนทางด่วน ตลอด 24 ชั่วโมง",
+      en: "Report accidents, vehicle breakdowns, or request towing and roadside assistance on expressways 24/7."
+    },
+    tags: {
+      th: ["ทางด่วน", "รถเสีย", "อุบัติเหตุบนทางด่วน", "รถยก", "ทางพิเศษ", "กทพ"],
+      en: ["expressway", "tollway", "car breakdown", "road accident", "towing", "exat"]
+    },
+    isQuickCall: false
+  },
+  {
     id: "1192",
     number: "1192",
     category: "police",
@@ -242,6 +260,24 @@ const EMERGENCY_NUMBERS = [
     isQuickCall: false
   },
   {
+    id: "1584",
+    number: "1584",
+    category: "public",
+    name: {
+      th: "ศูนย์คุ้มครองผู้โดยสารและร้องเรียนรถสาธารณะ (กรมการขนส่งทางบก)",
+      en: "DLT Public Transport Complaint Center"
+    },
+    desc: {
+      th: "ร้องเรียนบริการรถโดยสารสาธารณะ แท็กซี่ วินมอเตอร์ไซค์ รถเมล์ รถตู้ บริการไม่สุภาพ หรือเอาเปรียบผู้โดยสาร",
+      en: "File complaints regarding public transport services (taxis, buses, vans, motorcycle taxis), unfair fares, or bad service."
+    },
+    tags: {
+      th: ["ร้องเรียน", "รถสาธารณะ", "แท็กซี่", "รถเมล์", "รถตู้", "วินมอเตอร์ไซค์", "ขนส่งทางบก", "โกงราคา", "ปฏิเสธผู้โดยสาร"],
+      en: ["complaint", "public transport", "taxi", "bus", "van", "motorcycle taxi", "dlt", "fare", "overcharge"]
+    },
+    isQuickCall: false
+  },
+  {
     id: "1300",
     number: "1300",
     category: "public",
@@ -250,12 +286,12 @@ const EMERGENCY_NUMBERS = [
       en: "Social Assistance Center"
     },
     desc: {
-      th: "แจ้งเหตุความรุนแรงในครอบครัว เด็กและสตรีถูกทำร้าย คนไร้ที่พึ่ง หรือการค้ามนุษย์",
-      en: "Report domestic violence, child abuse, homelessness, or human trafficking."
+      th: "แจ้งเหตุความรุนแรงในครอบครัว เด็กและสตรีถูกทำร้าย คนไร้ที่พึ่ง คนหาย หรือการค้ามนุษย์",
+      en: "Report domestic violence, child abuse, homelessness, missing persons, or human trafficking."
     },
     tags: {
-      th: ["ทำร้ายร่างกาย", "เด็ก", "ผู้หญิง", "คนเร่ร่อน", "ความรุนแรง"],
-      en: ["abuse", "child protection", "homeless", "domestic violence", "trafficking"]
+      th: ["ทำร้ายร่างกาย", "เด็ก", "ผู้หญิง", "คนเร่ร่อน", "ความรุนแรง", "คนหาย"],
+      en: ["abuse", "child protection", "homeless", "domestic violence", "trafficking", "missing person"]
     },
     isQuickCall: false
   },
