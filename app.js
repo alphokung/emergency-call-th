@@ -788,6 +788,10 @@ function setupEventListeners() {
   document.addEventListener("click", (e) => {
     const callLink = e.target.closest('a[href^="tel:1669"]');
     if (callLink) {
+      if (callLink.id === "modal-fast-call-btn") {
+        close1669Modal();
+        return; // Allow direct dial action
+      }
       e.preventDefault();
       open1669Modal();
     }
