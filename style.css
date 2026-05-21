@@ -1,5 +1,47 @@
 @import url('https://fonts.googleapis.com/css2?family=Anuphan:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
+.material-symbols-outlined {
+  font-size: 24px;
+  width: 1em;
+  height: 1em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+/* Material Symbols Overrides by Selector */
+.search-icon .material-symbols-outlined {
+  font-size: 20px;
+}
+
+.search-clear-btn .material-symbols-outlined {
+  font-size: 18px;
+}
+
+.empty-state-icon .material-symbols-outlined {
+  font-size: 48px;
+}
+
+.patient-card-icon .material-symbols-outlined {
+  font-size: 28px;
+}
+
+.upload-icon {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+}
+
+.photo-remove-btn .material-symbols-outlined {
+  font-size: 18px;
+}
+
+.location-banner-icon .material-symbols-outlined {
+  font-size: 24px;
+}
+
 :root {
   /* Colors - Palette Tokens */
   --primary-30-base: #008858;
@@ -200,9 +242,11 @@ body {
   transition: all 0.2s ease;
 }
 
-.logo-icon svg {
+.logo-icon svg,
+.logo-icon .material-symbols-outlined {
   width: 18px;
   height: 18px;
+  font-size: 18px;
   fill: currentColor;
 }
 
@@ -279,9 +323,11 @@ body {
     width: 28px;
     height: 28px;
   }
-  .logo-icon svg {
+  .logo-icon svg,
+  .logo-icon .material-symbols-outlined {
     width: 14px;
     height: 14px;
+    font-size: 14px;
   }
 }
 
@@ -408,8 +454,10 @@ body {
   gap: var(--spacing-sm);
 }
 
-.section-title svg {
+.section-title svg,
+.section-title .material-symbols-outlined {
   color: var(--foreground-primary-default);
+  font-size: 20px;
 }
 
 .quick-calls-grid {
@@ -683,9 +731,11 @@ body {
 }
 
 .number-card-hotline svg,
-.number-card-hotline .icon-call {
+.number-card-hotline .icon-call,
+.number-card-hotline .material-symbols-outlined {
   width: 20px;
   height: 20px;
+  font-size: 20px;
 }
 
 /* Call Button (Pill shaped, min 48px height) */
@@ -779,15 +829,9 @@ body {
 .footer-content {
   max-width: 1024px;
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
-  align-items: center;
 }
 
 .footer-disclaimer {
-  max-width: 600px;
-  font-size: 11px;
   line-height: var(--line-height-label-s);
 }
 
@@ -849,10 +893,6 @@ body {
     margin-top: auto;
   }
 
-  .footer-content {
-    flex-direction: row;
-    justify-content: space-between;
-  }
 }
 
 /* ==========================================================================
@@ -1126,6 +1166,16 @@ body {
   gap: var(--spacing-xs);
   transition: all 0.2s;
   border-color: var(--neutral-80);
+}
+
+.symptom-chip .material-symbols-outlined {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .symptom-chip:hover {
@@ -1413,24 +1463,32 @@ body.modal-open {
 
 /* Custom Call Icon styling using CSS Mask */
 .icon-call {
-  display: inline-block;
-  background-color: currentColor;
-  -webkit-mask: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTciIHZpZXdCb3g9IjAgMCAxOCAxNyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyLjU1NjkgMTAuOTA2TDEyLjEwMTkgMTEuMzU5QzEyLjEwMTkgMTEuMzU5IDExLjAxODkgMTIuNDM1IDguMDYzODYgOS40OTY5OEM1LjEwODg2IDYuNTU4OTggNi4xOTE4NiA1LjQ4Mjk4IDYuMTkxODYgNS40ODI5OEw2LjQ3Nzg2IDUuMTk2OThDNy4xODQ4NiA0LjQ5NDk4IDcuMjUxODYgMy4zNjY5OCA2LjYzNDg2IDIuNTQyOThMNS4zNzQ4NiAwLjg1OTk3OUM0LjYxMDg2IC0wLjE2MDAyMSAzLjEzNTg2IC0wLjI5NTAyIDIuMjYwODYgMC41NzQ5OEwwLjY5MDg1NiAyLjEzNDk4QzAuMjU3ODU2IDIuNTY2OTggLTAuMDMyMTQ0IDMuMTI0OTggMC4wMDI4NTYgMy43NDQ5OEMwLjA5Mjg1NiA1LjMzMTk4IDAuODEwODU2IDguNzQ0OTggNC44MTQ4NiAxMi43MjdDOS4wNjE4NiAxNi45NDkgMTMuMDQ2OSAxNy4xMTcgMTQuNjc1OSAxNi55NjVDMTUuMTkxOSAxNi45MTcgMTUuNjM5OSAxNi42NTUgMTYuMDAwOSAxNi25NVMMTcuNDIwOSAxNC44ODNDMTguMzgwOSAxMy45MyAxOC4xMTA5IDEyLjI5NSAxNi44ODI5IDExLjYyOEwxNC45NzI5IDEwLjU4OUMxNC4xNjY5IDEwLjE1MiAxMy4xODY5IDEwLjI4IDEyLjU1NjkgMTAuOTA2WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+') no-repeat center / contain;
-  mask: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTciIHZpZXdCb3g9IjAgMCAxOCAxNyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyLjU1NjkgMTAuOTA2TDEyLjEwMTkgMTEuMzU5QzEyLjEwMTkgMTEuMzU5IDExLjAxODkgMTIuNDM1IDguMDYzODYgOS40OTY5OEM1LjEwODg2IDYuNTU4OTggNi4xOTE4NiA1LjQ4Mjk4IDYuMTkxODYgNS40ODI5OEw2LjQ3Nzg2IDUuMTk2OThDNy4xODQ4NiA0LjQ5NDk4IDcuMjUxODYgMy4zNjY5OCA2LjYzNDg2IDIuNTQyOThMNS4zNzQ4NiAwLjg1OTk3OUM0LjYxMDg2IC0wLjE2MDAyMSAzLjEzNTg2IC0wLjI5NTAyIDIuMjYwODYgMC41NzQ5OEwwLjY5MDg1NiAyLjEzNDk4QzAuMjU3ODU2IDIuNTY2OTggLTAuMDMyMTQ0IDMuMTI0OTggMC4wMDI4NTYgMy43NDQ5OEMwLjA5Mjg1NiA1LjMzMTk4IDAuODEwODU2IDguNzQ0OTggNC44MTQ4NiAxMi43MjdDOS4wNjE4NiAxNi45NDkgMTMuMDQ2OSAxNy4xMTcgMTQuNjc1OSAxNi55NjVDMTUuMTkxOSAxNi45MTcgMTUuNjM5OSAxNi42NTUgMTYuMDAwOSAxNi25NVMMTcuNDIwOSAxNC44ODNDMTguMzgwOSAxMy45MyAxOC4xMTA5IDEyLjI5NSAxNi44ODI5IDExLjYyOEwxNC45NzI5IDEwLjU4OUMxNC4xNjY5IDEwLjE1MiAxMy4xODY5IDEwLjI4IDEyLjU1NjkgMTAuOTA2WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+') no-repeat center / contain;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   vertical-align: middle;
 }
 
 .quick-card-call-icon .icon-call {
   width: 24px;
   height: 24px;
+  font-size: 24px;
 }
 
 .btn-call .icon-call {
   width: 20px;
   height: 20px;
+  font-size: 20px;
 }
 
 .btn-primary-action .icon-call {
   width: 18px;
   height: 18px;
+  font-size: 18px;
+}
+
+.btn-fast-call .icon-call {
+  width: 25px;
+  height: 25px;
+  font-size: 25px;
 }

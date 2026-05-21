@@ -669,7 +669,7 @@ function renderQuickCards() {
         <span class="quick-card-number">${item.number}</span>
       </div>
       <div class="quick-card-call-icon" aria-hidden="true">
-        <span class="icon-call" aria-hidden="true"></span>
+        <span class="material-symbols-outlined icon-call" aria-hidden="true">call</span>
       </div>
     `;
     elements.quickCallsContainer.appendChild(a);
@@ -741,11 +741,11 @@ function renderList() {
     // Icon based on category
     let catIcon = "";
     if (item.category === "medical") {
-      catIcon = `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M19 10.5h-5.5V5h-3v5.5H5v3h5.5V19h3v-5.5H19v-3z"/></svg>`;
+      catIcon = `<span class="material-symbols-outlined icon-call" aria-hidden="true" style="width: 12px; height: 12px;">call</span>`;
     } else if (item.category === "police") {
-      catIcon = `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`;
+      catIcon = `<span class="material-symbols-outlined icon-call" aria-hidden="true" style="width: 12px; height: 12px;">call</span>`;
     } else if (item.category === "fire") {
-      catIcon = `<span class="icon-call" aria-hidden="true" style="width: 12px; height: 12px;"></span>`;
+      catIcon = `<span class="material-symbols-outlined icon-call" aria-hidden="true" style="width: 12px; height: 12px;">call</span>`;
     }
     
     const categoryLabel = UI_STRINGS[currentLang].categories[item.category];
@@ -760,12 +760,12 @@ function renderList() {
           <p class="number-card-desc">${item.desc[currentLang]}</p>
         </div>
         <div class="number-card-hotline" aria-label="Phone number: ${item.number}">
-          <span class="icon-call" aria-hidden="true"></span>
+          <span class="material-symbols-outlined icon-call" aria-hidden="true">call</span>
           ${item.number}
         </div>
       </div>
       <a href="tel:${item.number}" class="btn-call" aria-label="Call ${item.name[currentLang]} at ${item.number}">
-        <span class="icon-call" aria-hidden="true"></span>
+        <span class="material-symbols-outlined icon-call" aria-hidden="true">call</span>
         <span>${UI_STRINGS[currentLang].callBtn}</span>
       </a>
     `;
@@ -901,10 +901,8 @@ function setupEventListeners() {
     
     const loadingText = currentLang === "th" ? "กำลังส่ง..." : "Sending...";
     elements.modalSubmitBtn.innerHTML = `
-      <svg class="spinner" viewBox="0 0 50 50">
-        <circle class="path" cx="25" cy="25" r="20" fill="none" stroke="currentColor" stroke-width="5"></circle>
-      </svg>
-      <span>${loadingText}</span>
+      <span class="material-symbols-outlined spinner">progress_activity</span>
+      <span>${UI_STRINGS[currentLang].modalCallingState}</span>
     `;
 
     setTimeout(() => {
@@ -939,13 +937,13 @@ function setupEventListeners() {
 
 // Symptoms Dataset for the 1669 Modal
 const SYMPTOMS_DATA = [
-  { id: "accident", th: "อุบัติเหตุ", en: "Accident", icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.27-3.82c.1-.3.38-.51.7-.51h10.05c.32 0 .61.21.7.51L19 11H5z"/></svg>` },
-  { id: "stroke", th: "เส้นเลือดในสมองแตก", en: "Stroke / Brain bleed", icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.25z"/></svg>` },
-  { id: "seizure", th: "ลมชัก", en: "Seizure", icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 6c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm10 5h-7.67l-2.03-3.03C12.11 7.69 11.75 7.5 11.36 7.5h-.01c-.39 0-.75.19-.94.47L7.66 12H2v2h6.64l1.63-2.45L12 14.88V22h2v-8.15l-2.22-3.33L15 13h7v-2z"/></svg>` },
-  { id: "fever", th: "ไข้สูง", en: "High Fever", icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M15 13V5c0-1.66-1.34-3-3-3S9 3.34 9 5v8c-1.21.91-2 2.37-2 4 0 2.76 2.24 5 5 5s5-2.24 5-5c0-1.63-.79-3.09-2-4zm-3-9c.55 0 1 .45 1 1v3h-2V5c0-.55.45-1 1-1z"/></svg>` },
-  { id: "female", th: "เพศหญิง", en: "Female", icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 2c-2.76 0-5 2.24-5 5 0 2.05 1.23 3.81 3 4.58V14H9.5v2H10v3h4v-3h.5v-2H14v-2.42c1.77-.77 3-2.53 3-4.58 0-2.76-2.24-5-5-5zm0 8c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"/></svg>` },
-  { id: "male", th: "เพศชาย", en: "Male", icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 2c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 8c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm8-8h-6v2h3.59L13 8.59c-.83-.37-1.75-.59-2.73-.59C6.46 8 3.5 10.96 3.5 14.73 3.5 18.5 6.46 21.46 10.23 21.46c3.77 0 6.73-2.96 6.73-6.73 0-.98-.22-1.9-.59-2.73L20 8.41V12h2V2z"/></svg>` },
-  { id: "others", th: "อื่นๆ", en: "Others", icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>` }
+  { id: "accident", th: "อุบัติเหตุ", en: "Accident", icon: `<span class="material-symbols-outlined">car_crash</span>` },
+  { id: "stroke", th: "เส้นเลือดในสมองแตก", en: "Stroke / Brain bleed", icon: `<span class="material-symbols-outlined">network_intelligence</span>` },
+  { id: "seizure", th: "ลมชัก", en: "Seizure", icon: `<span class="material-symbols-outlined">personal_injury</span>` },
+  { id: "fever", th: "ไข้สูง", en: "High Fever", icon: `<span class="material-symbols-outlined">thermostat</span>` },
+  { id: "female", th: "เพศหญิง", en: "Female", icon: `<span class="material-symbols-outlined">female</span>` },
+  { id: "male", th: "เพศชาย", en: "Male", icon: `<span class="material-symbols-outlined">male</span>` },
+  { id: "others", th: "อื่นๆ", en: "Others", icon: `<span class="material-symbols-outlined">more_horiz</span>` }
 ];
 
 // Render Symptom Chips dynamically inside modal
@@ -1139,9 +1137,7 @@ function showToast(message) {
   const toast = document.createElement("div");
   toast.className = "toast-notification";
   toast.innerHTML = `
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#10b981" width="20" height="20">
-      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-    </svg>
+    <span class="material-symbols-outlined" style="color: #10b981;">check_circle</span>
     <span>${message}</span>
   `;
   document.body.appendChild(toast);
