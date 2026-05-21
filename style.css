@@ -1,5 +1,47 @@
 @import url('https://fonts.googleapis.com/css2?family=Anuphan:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
+.material-symbols-outlined {
+  font-size: 24px;
+  width: 1em;
+  height: 1em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+/* Material Symbols Overrides by Selector */
+.search-icon .material-symbols-outlined {
+  font-size: 20px;
+}
+
+.search-clear-btn .material-symbols-outlined {
+  font-size: 18px;
+}
+
+.empty-state-icon .material-symbols-outlined {
+  font-size: 48px;
+}
+
+.patient-card-icon .material-symbols-outlined {
+  font-size: 28px;
+}
+
+.upload-icon {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+}
+
+.photo-remove-btn .material-symbols-outlined {
+  font-size: 18px;
+}
+
+.location-banner-icon .material-symbols-outlined {
+  font-size: 24px;
+}
+
 :root {
   /* Colors - Palette Tokens */
   --primary-30-base: #008858;
@@ -200,9 +242,11 @@ body {
   transition: all 0.2s ease;
 }
 
-.logo-icon svg {
+.logo-icon svg,
+.logo-icon .material-symbols-outlined {
   width: 18px;
   height: 18px;
+  font-size: 18px;
   fill: currentColor;
 }
 
@@ -279,9 +323,11 @@ body {
     width: 28px;
     height: 28px;
   }
-  .logo-icon svg {
+  .logo-icon svg,
+  .logo-icon .material-symbols-outlined {
     width: 14px;
     height: 14px;
+    font-size: 14px;
   }
 }
 
@@ -408,8 +454,10 @@ body {
   gap: var(--spacing-sm);
 }
 
-.section-title svg {
+.section-title svg,
+.section-title .material-symbols-outlined {
   color: var(--foreground-primary-default);
+  font-size: 20px;
 }
 
 .quick-calls-grid {
@@ -683,9 +731,11 @@ body {
 }
 
 .number-card-hotline svg,
-.number-card-hotline .icon-call {
+.number-card-hotline .icon-call,
+.number-card-hotline .material-symbols-outlined {
   width: 20px;
   height: 20px;
+  font-size: 20px;
 }
 
 /* Call Button (Pill shaped, min 48px height) */
@@ -1423,23 +1473,32 @@ body.modal-open {
 
 /* Custom Call Icon styling using CSS Mask */
 .icon-call {
-  display: inline-block;
-  background: url('_media/call.svg') no-repeat ;
-  background-size: contain;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   vertical-align: middle;
 }
 
 .quick-card-call-icon .icon-call {
   width: 24px;
   height: 24px;
+  font-size: 24px;
 }
 
 .btn-call .icon-call {
   width: 20px;
   height: 20px;
+  font-size: 20px;
 }
 
 .btn-primary-action .icon-call {
   width: 18px;
   height: 18px;
+  font-size: 18px;
+}
+
+.btn-fast-call .icon-call {
+  width: 25px;
+  height: 25px;
+  font-size: 25px;
 }

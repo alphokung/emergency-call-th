@@ -669,7 +669,7 @@ function renderQuickCards() {
         <span class="quick-card-number">${item.number}</span>
       </div>
       <div class="quick-card-call-icon" aria-hidden="true">
-        <span class="icon-call" aria-hidden="true"></span>
+        <span class="material-symbols-outlined icon-call" aria-hidden="true">call</span>
       </div>
     `;
     elements.quickCallsContainer.appendChild(a);
@@ -741,11 +741,11 @@ function renderList() {
     // Icon based on category
     let catIcon = "";
     if (item.category === "medical") {
-      catIcon = `<span class="icon-call" aria-hidden="true" style="width: 12px; height: 12px;"></span>`;
+      catIcon = `<span class="material-symbols-outlined icon-call" aria-hidden="true" style="width: 12px; height: 12px;">call</span>`;
     } else if (item.category === "police") {
-      catIcon = `<span class="icon-call" aria-hidden="true" style="width: 12px; height: 12px;"></span>`;
+      catIcon = `<span class="material-symbols-outlined icon-call" aria-hidden="true" style="width: 12px; height: 12px;">call</span>`;
     } else if (item.category === "fire") {
-      catIcon = `<span class="icon-call" aria-hidden="true" style="width: 12px; height: 12px;"></span>`;
+      catIcon = `<span class="material-symbols-outlined icon-call" aria-hidden="true" style="width: 12px; height: 12px;">call</span>`;
     }
     
     const categoryLabel = UI_STRINGS[currentLang].categories[item.category];
@@ -760,12 +760,12 @@ function renderList() {
           <p class="number-card-desc">${item.desc[currentLang]}</p>
         </div>
         <div class="number-card-hotline" aria-label="Phone number: ${item.number}">
-          <span class="icon-call" aria-hidden="true"></span>
+          <span class="material-symbols-outlined icon-call" aria-hidden="true">call</span>
           ${item.number}
         </div>
       </div>
       <a href="tel:${item.number}" class="btn-call" aria-label="Call ${item.name[currentLang]} at ${item.number}">
-        <span class="icon-call" aria-hidden="true"></span>
+        <span class="material-symbols-outlined icon-call" aria-hidden="true">call</span>
         <span>${UI_STRINGS[currentLang].callBtn}</span>
       </a>
     `;
@@ -901,10 +901,8 @@ function setupEventListeners() {
     
     const loadingText = currentLang === "th" ? "กำลังส่ง..." : "Sending...";
     elements.modalSubmitBtn.innerHTML = `
-      <svg class="spinner" viewBox="0 0 50 50">
-        <circle class="path" cx="25" cy="25" r="20" fill="none" stroke="currentColor" stroke-width="5"></circle>
-      </svg>
-      <span>${loadingText}</span>
+      <span class="material-symbols-outlined spinner">progress_activity</span>
+      <span>${UI_STRINGS[currentLang].modalCallingState}</span>
     `;
 
     setTimeout(() => {
@@ -1139,9 +1137,7 @@ function showToast(message) {
   const toast = document.createElement("div");
   toast.className = "toast-notification";
   toast.innerHTML = `
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#10b981" width="20" height="20">
-      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-    </svg>
+    <span class="material-symbols-outlined" style="color: #10b981;">check_circle</span>
     <span>${message}</span>
   `;
   document.body.appendChild(toast);
