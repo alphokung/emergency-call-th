@@ -536,6 +536,17 @@ body {
   text-transform: uppercase;
   opacity: 0.9;
   letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.profile-badge-icon {
+  font-size: 14px !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 6px;
+  vertical-align: middle;
 }
 
 .quick-card-dept {

@@ -495,6 +495,7 @@ const UI_STRINGS = {
 let currentLang = localStorage.getItem("emergency_lang") || "th";
 let activeCategory = "all";
 let searchQuery = "";
+const showProfileIcon = new URLSearchParams(window.location.search).get('s') === 'profile';
 
 // 1669 Modal State
 let selectedPatient = null; // null, "self" or "others"
@@ -664,9 +665,16 @@ function renderQuickCards() {
     a.className = `quick-card ${item.category}`;
     a.setAttribute("aria-label", `${UI_STRINGS[currentLang].quickCallBadge}: ${item.number} ${item.name[currentLang]}`);
     
+    const profileIconHtml = (item.id === "1669" && showProfileIcon)
+      ? ` <span class="profile-badge-icon material-symbols-outlined" title="Profile Enabled">person</span>`
+      : "";
+
     a.innerHTML = `
       <div class="quick-card-info">
-        <span class="quick-card-label">${UI_STRINGS[currentLang].quickCallBadge}</span>
+        <span class="quick-card-label">
+          ${UI_STRINGS[currentLang].quickCallBadge}
+          ${profileIconHtml}
+        </span>
         <span class="quick-card-dept">${item.name[currentLang]}</span>
         <span class="quick-card-number">${item.number}</span>
       </div>
@@ -752,11 +760,16 @@ function renderList() {
     
     const categoryLabel = UI_STRINGS[currentLang].categories[item.category];
     
+    const profileIconHtml = (item.id === "1669" && showProfileIcon)
+      ? ` <span class="profile-badge-icon material-symbols-outlined" title="Profile Enabled">person</span>`
+      : "";
+
     card.innerHTML = `
       <div class="number-card-top">
         <div class="number-card-main">
           <span class="badge ${item.category}" aria-label="Category: ${categoryLabel}">
             ${categoryLabel}
+            ${profileIconHtml}
           </span>
           <h2 class="number-card-title">${item.name[currentLang]}</h2>
           <p class="number-card-desc">${item.desc[currentLang]}</p>
@@ -824,7 +837,7 @@ function setupEventListeners() {
   });
 
   // Intercept calling 1669 clicks
-  if (elements.modal1669) {
+  if (elements.modal1669 && !showProfileIcon) {
     document.addEventListener("click", (e) => {
       const callLink = e.target.closest('a[href^="tel:1669"]');
       if (callLink) {
