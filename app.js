@@ -202,8 +202,8 @@ const EMERGENCY_NUMBERS = [
       en: "Fire and Rescue Department"
     },
     quickName: {
-      th: "ไฟไหม้ สัตว์ร้ายเข้าบ้าน (ดับเพลิง)",
-      en: "Fire and Rescue Department"
+      th: "ไฟไหม้ สัตว์ร้ายเข้าบ้าน",
+      en: "Fire and Rescue"
     },
     desc: {
       th: "แจ้งเหตุเพลิงไหม้ สัตว์ร้ายหรือสิ่งมีพิษเข้าบ้าน บรรเทาสาธารณภัยเบื้องต้น",
