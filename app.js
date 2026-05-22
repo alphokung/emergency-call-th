@@ -693,13 +693,15 @@ function renderQuickCards() {
     }
 
     a.innerHTML = `
-      ${vectorSvg}
       <div class="quick-card-info">
         <span class="quick-card-label">
           ${UI_STRINGS[currentLang].quickCallBadge}
           ${profileIconHtml}
         </span>
-        <span class="quick-card-dept">${displayName}</span>
+        <span class="quick-card-dept">
+          ${vectorSvg}
+          <span>${displayName}</span>
+        </span>
         <span class="quick-card-number">${item.number}</span>
       </div>
       <div class="quick-card-call-icon" aria-hidden="true">
