@@ -530,31 +530,31 @@ body {
   right: 76px;
   top: 50%;
   transform: translateY(-50%);
-  width: 72px;
-  height: 72px;
-  opacity: 0.12;
+  height: 80%;
+  width: auto;
+  opacity: 0.15;
   color: var(--neutral-100);
   pointer-events: none;
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+  z-index: 1;
 }
 
 .quick-card:hover .quick-card-vector {
-  transform: translateY(-50%) scale(1.15) rotate(-6deg);
-  opacity: 0.22;
+  transform: translateY(-50%) scale(1.08);
+  opacity: 0.25;
 }
 
 @media (min-width: 1024px) {
   .quick-card-vector {
-    right: 20px;
-    top: 20px;
-    transform: none;
-    width: 88px;
-    height: 88px;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 75%;
   }
   
   .quick-card:hover .quick-card-vector {
-    transform: scale(1.15) rotate(-6deg);
-    opacity: 0.22;
+    transform: translateY(-50%) scale(1.08);
+    opacity: 0.25;
   }
 }
 
@@ -562,6 +562,9 @@ body {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xxs);
+  position: relative;
+  z-index: 2;
+  max-width: 65%;
 }
 
 .quick-card-label {
@@ -608,6 +611,8 @@ body {
   color: var(--neutral-100);
   transition: background-color 0.2s ease;
   flex-shrink: 0;
+  position: relative;
+  z-index: 2;
 }
 
 .quick-card:hover .quick-card-call-icon {

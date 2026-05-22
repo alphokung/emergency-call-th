@@ -686,28 +686,64 @@ function renderQuickCards() {
     let vectorSvg = "";
     if (item.category === "medical") {
       vectorSvg = `
-        <svg class="quick-card-vector" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M14 18H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h8v12z"/>
-          <path d="M14 9h4l3 3v4a2 2 0 0 1-2 2h-5V9z"/>
-          <circle cx="7" cy="18" r="2"/>
-          <circle cx="17" cy="18" r="2"/>
-          <path d="M9 12h4M11 10v4" stroke-width="1.5"/>
+        <svg class="quick-card-vector" viewBox="0 0 140 90" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <!-- Speed lines -->
+          <path d="M 15,33 H 38 M 22,43 H 36 M 18,53 H 40" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          <!-- Heartbeat line -->
+          <path d="M 10,80 H 62 L 66,66 L 70,88 L 75,56 L 79,83 L 83,80 H 130" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- Ambulance Body -->
+          <path d="M 48,65 V 28 A 3,3 0 0 1 51,25 H 100 V 36 H 115 L 124,48 H 130 V 65 H 120 A 8,8 0 0 0 104,65 H 68 A 8,8 0 0 0 52,65 H 48 Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+          <!-- Cab Window -->
+          <path d="M 105,40 H 114 L 120,48 H 105 Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+          <!-- Cross in Cargo -->
+          <rect x="67" y="35" width="16" height="16" rx="2" stroke="currentColor" stroke-width="1.2"/>
+          <path d="M 75,39 V 47 M 71,43 H 79" stroke="currentColor" stroke-width="2"/>
+          <!-- Siren -->
+          <path d="M 105,36 A 3,3 0 0 1 111,36 Z" fill="currentColor"/>
+          <path d="M 103,32 L 101,30 M 108,31 V 28 M 113,32 L 115,30" stroke="currentColor" stroke-width="1"/>
+          <!-- Wheels -->
+          <circle cx="60" cy="65" r="7" stroke="currentColor" stroke-width="1.2" fill="none"/>
+          <circle cx="60" cy="65" r="2.5" stroke="currentColor" stroke-width="1.2" fill="none"/>
+          <circle cx="112" cy="65" r="7" stroke="currentColor" stroke-width="1.2" fill="none"/>
+          <circle cx="112" cy="65" r="2.5" stroke="currentColor" stroke-width="1.2" fill="none"/>
         </svg>
       `;
     } else if (item.category === "police") {
       vectorSvg = `
-        <svg class="quick-card-vector" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-          <polygon points="12,7 13.5,10.5 17,10.5 14,12.5 15.5,16 12,14 8.5,16 10,12.5 7,10.5 10.5,10.5"/>
+        <svg class="quick-card-vector" viewBox="0 0 140 90" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <!-- Shield and Star -->
+          <path d="M 15,48 Q 25,51 35,48 Q 36,60 25,72 Q 14,60 15,48 Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M 25,53 L 26.5,56.5 L 30,56.5 L 27.2,58.7 L 28.3,62 L 25,60 L 21.7,62 L 22.8,58.7 L 20,56.5 L 23.5,56.5 Z" fill="currentColor"/>
+          <!-- Police Car Body -->
+          <path d="M 50,52 H 55 L 68,38 H 92 L 104,50 H 122 V 65 H 112 A 8,8 0 0 0 96,65 H 68 A 8,8 0 0 0 52,65 H 50 Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+          <!-- Windows -->
+          <path d="M 70,41 H 79 V 50 H 67 Z M 82,41 H 91 L 99,50 H 82 Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+          <!-- Siren -->
+          <path d="M 77,38 A 3,3 0 0 1 83,38 Z" fill="currentColor"/>
+          <path d="M 73,34 L 75,32 M 80,33 V 30 M 87,34 L 85,32" stroke="currentColor" stroke-width="1"/>
+          <!-- Wheels -->
+          <circle cx="60" cy="65" r="7" stroke="currentColor" stroke-width="1.2" fill="none"/>
+          <circle cx="60" cy="65" r="2.5" stroke="currentColor" stroke-width="1.2" fill="none"/>
+          <circle cx="104" cy="65" r="7" stroke="currentColor" stroke-width="1.2" fill="none"/>
+          <circle cx="104" cy="65" r="2.5" stroke="currentColor" stroke-width="1.2" fill="none"/>
         </svg>
       `;
     } else if (item.category === "fire") {
       vectorSvg = `
-        <svg class="quick-card-vector" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M12 2C12 2 8.5 6 8.5 10.5a3.5 3.5 0 1 0 7 0C15.5 6 12 2 12 2z" />
-          <path d="M12 6c0 0-2 2.5-2 4.5a2 2 0 0 0 4 0c0-2-2-4.5-2-4.5z" opacity="0.7"/>
-          <path d="M4 18c1.5-1.5 2.5-1.5 3.5 0s1.5 2.5 3 2.5 2.5-1 3.5-2.5c.8-1.2 2-2 3.5-2a2.5 2.5 0 0 1 2.5 2.5" stroke-width="1.5" />
-          <path d="M21 16.5h1" stroke-width="1.5" />
+        <svg class="quick-card-vector" viewBox="0 0 140 90" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <!-- Flames in background -->
+          <path d="M 98,60 C 104,50 108,40 106,28 C 111,37 113,45 111,53 C 117,41 126,30 124,16 C 130,32 128,49 116,63" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+          <path d="M 88,60 C 92,54 94,48 93,42 C 96,46 97,50 96,54" stroke="currentColor" stroke-width="1.2"/>
+          <!-- Helmet Dome -->
+          <path d="M 54,54 C 54,34 94,34 94,54" stroke="currentColor" stroke-width="1.2"/>
+          <!-- Helmet Crest -->
+          <path d="M 58,38 C 58,22 84,22 88,40" stroke="currentColor" stroke-width="1.2"/>
+          <!-- Front Shield/Badge -->
+          <path d="M 48,53 L 53,35 C 55,35 58,35 60,38 L 58,53 Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+          <!-- Badge Flame -->
+          <path d="M 54,47 C 53,44 54,41 54,41 C 54,41 55,44 54,47" stroke="currentColor" stroke-width="1"/>
+          <!-- Brim -->
+          <path d="M 44,56 C 64,54 84,56 104,63 C 108,64 107,68 103,68 C 85,68 62,66 44,56 Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
         </svg>
       `;
     }
