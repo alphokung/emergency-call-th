@@ -682,13 +682,26 @@ function renderQuickCards() {
       ? ` <span class="profile-badge-icon material-symbols-outlined" title="Profile Enabled">person</span>`
       : "";
 
+    // Determine the vector SVG based on category
+    let vectorSvg = "";
+    if (item.category === "medical") {
+      vectorSvg = `<img class="quick-card-vector" src="_media/health.svg" alt="" aria-hidden="true">`;
+    } else if (item.category === "police") {
+      vectorSvg = `<img class="quick-card-vector" src="_media/police.svg" alt="" aria-hidden="true">`;
+    } else if (item.category === "fire") {
+      vectorSvg = `<img class="quick-card-vector" src="_media/fire.svg" alt="" aria-hidden="true">`;
+    }
+
     a.innerHTML = `
       <div class="quick-card-info">
         <span class="quick-card-label">
           ${UI_STRINGS[currentLang].quickCallBadge}
           ${profileIconHtml}
         </span>
-        <span class="quick-card-dept">${displayName}</span>
+        <span class="quick-card-dept">
+          ${vectorSvg}
+          <span>${displayName}</span>
+        </span>
         <span class="quick-card-number">${item.number}</span>
       </div>
       <div class="quick-card-call-icon" aria-hidden="true">

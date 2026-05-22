@@ -524,10 +524,27 @@ body {
   color: var(--neutral-100);
 }
 
+/* Quick Card Decorative Vector Illustration */
+.quick-card-vector {
+  height: 20px;
+  width: auto;
+  opacity: 0.95;
+  pointer-events: none;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  flex-shrink: 0;
+}
+
+.quick-card:hover .quick-card-vector {
+  transform: scale(1.1);
+}
+
 .quick-card-info {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xxs);
+  position: relative;
+  z-index: 2;
+  max-width: calc(100% - 64px);
 }
 
 .quick-card-label {
@@ -553,6 +570,9 @@ body {
   font-size: var(--font-size-title-m);
   font-weight: 700;
   line-height: var(--line-height-title-m);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
 }
 
 .quick-card-number {
@@ -574,6 +594,11 @@ body {
   color: var(--neutral-100);
   transition: background-color 0.2s ease;
   flex-shrink: 0;
+  position: absolute;
+  right: var(--spacing-xl);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
 }
 
 .quick-card:hover .quick-card-call-icon {
@@ -875,9 +900,6 @@ body {
     justify-content: space-between;
   }
 
-  .quick-card-call-icon {
-    align-self: flex-end;
-  }
 
   .category-nav {
     margin: 0;
