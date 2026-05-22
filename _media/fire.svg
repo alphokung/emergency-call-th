@@ -1,0 +1,15 @@
+<svg width="140" height="90" viewBox="0 0 140 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Flames in background -->
+  <path d="M 98,60 C 104,50 108,40 106,28 C 111,37 113,45 111,53 C 117,41 126,30 124,16 C 130,32 128,49 116,63" stroke="white" stroke-width="1.2" stroke-linejoin="round"/>
+  <path d="M 88,60 C 92,54 94,48 93,42 C 96,46 97,50 96,54" stroke="white" stroke-width="1.2"/>
+  <!-- Helmet Dome -->
+  <path d="M 54,54 C 54,34 94,34 94,54" stroke="white" stroke-width="1.2"/>
+  <!-- Helmet Crest -->
+  <path d="M 58,38 C 58,22 84,22 88,40" stroke="white" stroke-width="1.2"/>
+  <!-- Front Shield/Badge -->
+  <path d="M 48,53 L 53,35 C 55,35 58,35 60,38 L 58,53 Z" stroke="white" stroke-width="1.2" stroke-linejoin="round"/>
+  <!-- Badge Flame -->
+  <path d="M 54,47 C 53,44 54,41 54,41 C 54,41 55,44 54,47" stroke="white" stroke-width="1"/>
+  <!-- Brim -->
+  <path d="M 44,56 C 64,54 84,56 104,63 C 108,64 107,68 103,68 C 85,68 62,66 44,56 Z" stroke="white" stroke-width="1.2" stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,21 @@
+<svg width="140" height="90" viewBox="0 0 140 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Speed lines -->
+  <path d="M 15,33 H 38 M 22,43 H 36 M 18,53 H 40" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+  <!-- Heartbeat line -->
+  <path d="M 10,80 H 62 L 66,66 L 70,88 L 75,56 L 79,83 L 83,80 H 130" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Ambulance Body -->
+  <path d="M 48,65 V 28 A 3,3 0 0 1 51,25 H 100 V 36 H 115 L 124,48 H 130 V 65 H 120 A 8,8 0 0 0 104,65 H 68 A 8,8 0 0 0 52,65 H 48 Z" stroke="white" stroke-width="1.2" stroke-linejoin="round"/>
+  <!-- Cab Window -->
+  <path d="M 105,40 H 114 L 120,48 H 105 Z" stroke="white" stroke-width="1.2" stroke-linejoin="round"/>
+  <!-- Cross in Cargo -->
+  <rect x="67" y="35" width="16" height="16" rx="2" stroke="white" stroke-width="1.2"/>
+  <path d="M 75,39 V 47 M 71,43 H 79" stroke="white" stroke-width="2"/>
+  <!-- Siren -->
+  <path d="M 105,36 A 3,3 0 0 1 111,36 Z" fill="white"/>
+  <path d="M 103,32 L 101,30 M 108,31 V 28 M 113,32 L 115,30" stroke="white" stroke-width="1"/>
+  <!-- Wheels -->
+  <circle cx="60" cy="65" r="7" stroke="white" stroke-width="1.2" fill="none"/>
+  <circle cx="60" cy="65" r="2.5" stroke="white" stroke-width="1.2" fill="none"/>
+  <circle cx="112" cy="65" r="7" stroke="white" stroke-width="1.2" fill="none"/>
+  <circle cx="112" cy="65" r="2.5" stroke="white" stroke-width="1.2" fill="none"/>
+</svg>
