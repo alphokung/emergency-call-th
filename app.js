@@ -7,6 +7,10 @@ const EMERGENCY_NUMBERS = [
     category: "medical",
     name: {
       th: "สถาบันการแพทย์ฉุกเฉินแห่งชาติ (สพฉ.)",
+      en: "National Institute for Emergency Medicine (NIEMS)"
+    },
+    quickName: {
+      th: "เจ็บป่วยฉุกเฉิน (สพฉ.)",
       en: "Ambulance (NIEMS 1669)"
     },
     desc: {
@@ -80,7 +84,11 @@ const EMERGENCY_NUMBERS = [
     number: "191",
     category: "police",
     name: {
-      th: "ตำรวจ (แจ้งเหตุด่วนเหตุร้าย)",
+      th: "สำนักงานตำรวจแห่งชาติ (ตำรวจ)",
+      en: "Royal Thai Police"
+    },
+    quickName: {
+      th: "เหตุด่วนเหตุร้าย (ตำรวจ)",
       en: "General Police Emergency"
     },
     desc: {
@@ -190,7 +198,11 @@ const EMERGENCY_NUMBERS = [
     number: "199",
     category: "fire",
     name: {
-      th: "ดับเพลิงและกู้ภัย",
+      th: "สำนักป้องกันและบรรเทาสาธารณภัย (ดับเพลิง)",
+      en: "Fire and Rescue Department"
+    },
+    quickName: {
+      th: "ไฟไหม้ สัตว์ร้ายเข้าบ้าน (ดับเพลิง)",
       en: "Fire and Rescue Department"
     },
     desc: {
@@ -663,7 +675,8 @@ function renderQuickCards() {
     const a = document.createElement("a");
     a.href = `tel:${item.number}`;
     a.className = `quick-card ${item.category}`;
-    a.setAttribute("aria-label", `${UI_STRINGS[currentLang].quickCallBadge}: ${item.number} ${item.name[currentLang]}`);
+    const displayName = item.quickName ? item.quickName[currentLang] : item.name[currentLang];
+    a.setAttribute("aria-label", `${UI_STRINGS[currentLang].quickCallBadge}: ${item.number} ${displayName}`);
     
     const profileIconHtml = (item.id === "1669" && showProfileIcon)
       ? ` <span class="profile-badge-icon material-symbols-outlined" title="Profile Enabled">person</span>`
@@ -675,7 +688,7 @@ function renderQuickCards() {
           ${UI_STRINGS[currentLang].quickCallBadge}
           ${profileIconHtml}
         </span>
-        <span class="quick-card-dept">${item.name[currentLang]}</span>
+        <span class="quick-card-dept">${displayName}</span>
         <span class="quick-card-number">${item.number}</span>
       </div>
       <div class="quick-card-call-icon" aria-hidden="true">
@@ -704,11 +717,15 @@ function getFilteredNumbers() {
       const matchDescTH = item.desc.th.toLowerCase().includes(query);
       const matchDescEN = item.desc.en.toLowerCase().includes(query);
       
+      // Match in quickName if it exists
+      const matchQuickNameTH = item.quickName ? item.quickName.th.toLowerCase().includes(query) : false;
+      const matchQuickNameEN = item.quickName ? item.quickName.en.toLowerCase().includes(query) : false;
+      
       // Match in tags
       const matchTagsTH = item.tags.th.some(tag => tag.toLowerCase().includes(query));
       const matchTagsEN = item.tags.en.some(tag => tag.toLowerCase().includes(query));
       
-      return matchNumber || matchNameTH || matchNameEN || matchDescTH || matchDescEN || matchTagsTH || matchTagsEN;
+      return matchNumber || matchNameTH || matchNameEN || matchQuickNameTH || matchQuickNameEN || matchDescTH || matchDescEN || matchTagsTH || matchTagsEN;
     }
     
     return true;
