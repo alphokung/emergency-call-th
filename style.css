@@ -524,6 +524,40 @@ body {
   color: var(--neutral-100);
 }
 
+/* Quick Card Decorative Vector Illustration */
+.quick-card-vector {
+  position: absolute;
+  right: 76px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 72px;
+  height: 72px;
+  opacity: 0.12;
+  color: var(--neutral-100);
+  pointer-events: none;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+}
+
+.quick-card:hover .quick-card-vector {
+  transform: translateY(-50%) scale(1.15) rotate(-6deg);
+  opacity: 0.22;
+}
+
+@media (min-width: 1024px) {
+  .quick-card-vector {
+    right: 20px;
+    top: 20px;
+    transform: none;
+    width: 88px;
+    height: 88px;
+  }
+  
+  .quick-card:hover .quick-card-vector {
+    transform: scale(1.15) rotate(-6deg);
+    opacity: 0.22;
+  }
+}
+
 .quick-card-info {
   display: flex;
   flex-direction: column;

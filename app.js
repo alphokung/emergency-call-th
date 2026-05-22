@@ -682,7 +682,38 @@ function renderQuickCards() {
       ? ` <span class="profile-badge-icon material-symbols-outlined" title="Profile Enabled">person</span>`
       : "";
 
+    // Determine the vector SVG based on category
+    let vectorSvg = "";
+    if (item.category === "medical") {
+      vectorSvg = `
+        <svg class="quick-card-vector" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M14 18H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h8v12z"/>
+          <path d="M14 9h4l3 3v4a2 2 0 0 1-2 2h-5V9z"/>
+          <circle cx="7" cy="18" r="2"/>
+          <circle cx="17" cy="18" r="2"/>
+          <path d="M9 12h4M11 10v4" stroke-width="1.5"/>
+        </svg>
+      `;
+    } else if (item.category === "police") {
+      vectorSvg = `
+        <svg class="quick-card-vector" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <polygon points="12,7 13.5,10.5 17,10.5 14,12.5 15.5,16 12,14 8.5,16 10,12.5 7,10.5 10.5,10.5"/>
+        </svg>
+      `;
+    } else if (item.category === "fire") {
+      vectorSvg = `
+        <svg class="quick-card-vector" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 2C12 2 8.5 6 8.5 10.5a3.5 3.5 0 1 0 7 0C15.5 6 12 2 12 2z" />
+          <path d="M12 6c0 0-2 2.5-2 4.5a2 2 0 0 0 4 0c0-2-2-4.5-2-4.5z" opacity="0.7"/>
+          <path d="M4 18c1.5-1.5 2.5-1.5 3.5 0s1.5 2.5 3 2.5 2.5-1 3.5-2.5c.8-1.2 2-2 3.5-2a2.5 2.5 0 0 1 2.5 2.5" stroke-width="1.5" />
+          <path d="M21 16.5h1" stroke-width="1.5" />
+        </svg>
+      `;
+    }
+
     a.innerHTML = `
+      ${vectorSvg}
       <div class="quick-card-info">
         <span class="quick-card-label">
           ${UI_STRINGS[currentLang].quickCallBadge}
