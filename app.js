@@ -11,7 +11,7 @@ const EMERGENCY_NUMBERS = [
     },
     quickName: {
       th: "เจ็บป่วยฉุกเฉิน (สพฉ.)",
-      en: "Ambulance (NIEMS 1669)"
+      en: "Illness, Emergency"
     },
     desc: {
       th: "อุบัติเหตุร้ายแรง เจ็บป่วยฉุกเฉิน ทั่วประเทศ โทรฟรีตลอด 24 ชั่วโมง",
@@ -89,7 +89,7 @@ const EMERGENCY_NUMBERS = [
     },
     quickName: {
       th: "เหตุด่วนเหตุร้าย (ตำรวจ)",
-      en: "General Police Emergency"
+      en: "Police Emergency"
     },
     desc: {
       th: "แจ้งเหตุด่วนเหตุร้าย ทะเลาะวิวาท ความไม่ปลอดภัย คดีอาญา ทั่วประเทศ",
@@ -819,6 +819,17 @@ function renderList() {
   });
 }
 
+// Clarity Tracking Helper
+function trackClarityCall(number) {
+  if (typeof window.clarity === "function") {
+    window.clarity("set", "clicked_hotline", number);
+    window.clarity("event", `click_${number}`);
+    console.log(`[Clarity] Tracked click on hotline: ${number}`);
+  } else {
+    console.warn(`[Clarity] Clarity is not loaded yet. Click on hotline: ${number}`);
+  }
+}
+
 // Live Region announcements for Screen Readers
 function announceA11y(text) {
   elements.a11yAnnouncer.textContent = text;
@@ -830,6 +841,15 @@ function announceA11y(text) {
 
 // Event Listeners Setup
 function setupEventListeners() {
+  // Track Clarity click event on any tel link
+  document.addEventListener("click", (e) => {
+    const callLink = e.target.closest('a[href^="tel:"]');
+    if (callLink) {
+      const number = callLink.getAttribute("href").replace("tel:", "");
+      trackClarityCall(number);
+    }
+  });
+
   // Language selectors
   elements.langThBtn.addEventListener("click", () => setupLanguage("th"));
   elements.langEnBtn.addEventListener("click", () => setupLanguage("en"));
@@ -974,6 +994,9 @@ function setupEventListeners() {
         elements.modalSubmitBtn.disabled = false;
         elements.modalSubmitBtn.innerHTML = originalContent;
         close1669Modal();
+
+        // Track clarity event
+        trackClarityCall("1669");
 
         // Instantly trigger the native call action
         window.location.href = "tel:1669";
